@@ -1009,13 +1009,21 @@ const KPI_DEF = [
 function kpiVals(a) { return KPI_DEF.map(k => avg(a.map(r => r[k.col]))); }
 
 
-// ── Count L1s on 0 MTD Sale (unique agents, max mtd_sale per agent) ──
-function countZeroSale(rows) {
+// ── Count L1s on 0 MTD Sale — current month, sidebar filters applied ──
+function countZeroSale() {
+  // Current month = last date in data e.g. '2026-05'
+  const curMonth = D.maps.dates.length ? D.maps.dates[D.maps.dates.length-1].slice(0,7) : '';
+  // Get all rows for current month that pass sidebar filters, associates only
   const byEmp = {};
-  rows.forEach(r => {
+  D.rows.forEach(r => {
+    if (r[C.desig] !== AI) return;           // associates only
+    if (!passes(r)) return;                  // sidebar filters (loc, vint, rm, mgr, week)
+    const dateStr = D.maps.dates[r[C.date]] || '';
+    if (!dateStr.startsWith(curMonth)) return; // current month only
     const ei = r[C.emp]; if (ei < 0) return;
     if (byEmp[ei] === undefined) byEmp[ei] = 0;
-    if ((r[C.mtd_sale] || 0) > byEmp[ei]) byEmp[ei] = r[C.mtd_sale] || 0;
+    const sale = r[C.mtd_sale] || 0;
+    if (sale > byEmp[ei]) byEmp[ei] = sale;  // take max (MTD is cumulative)
   });
   const vals = Object.values(byEmp);
   return { zero: vals.filter(v => v === 0).length, total: vals.length };
@@ -1041,7 +1049,7 @@ function drawKPI() {
   const ltPPTCount = a.filter(r => (r[C.vc] + r[C.ppt]) < 1).length;
   const ltPPTPct   = a.length ? (ltPPTCount / a.length * 100).toFixed(1) : '0.0';
 
-  const zs = countZeroSale(assocs(getRows(DS.d3)));
+  const zs = countZeroSale();
   const zsPct = zs.total ? (zs.zero/zs.total*100).toFixed(1) : '0.0';
   document.getElementById('kpi-stat-boxes').innerHTML = `
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px">
@@ -1158,7 +1166,7 @@ function rmAgg(a, adhCol) {
     m.vc += r[C.vc]; m.ppt += r[C.ppt]; m.vc0tp += r[C.vc0tp];
     m.ppt0tp += r[C.ppt0tp]; m.eff += r[C.eff]; m.tp += r[C.tp];
     if (r[C.zero_vc] === 1) m.zvc++;
-    m.agents.add(r[C.emp]); if(!m.saleRows)m.saleRows=[]; m.saleRows.push(r);
+    m.agents.add(r[C.emp]);
   });
   return Object.entries(map).map(([ri, v]) => ({
     name: D.maps.rms[ri], n: v.n, comp: v.comp,
@@ -1168,7 +1176,7 @@ function rmAgg(a, adhCol) {
     avgEffVC: v.n ? +(v.vc0tp/v.n).toFixed(2) : 0, avgEffPPT: v.n ? +(v.ppt0tp/v.n).toFixed(2) : 0,
     avgEff: v.n ? +(v.eff/v.n).toFixed(2) : 0, avgTP: v.n ? +(v.tp/v.n).toFixed(1) : 0,
     zvcPct: v.n ? +(v.zvc/v.n*100).toFixed(1) : 0,
-    zeroSale: (() => { const m={}; (v.saleRows||[]).forEach(r=>{const ei=r[C.emp];if(ei<0)return;if(m[ei]===undefined)m[ei]=0;if((r[C.mtd_sale]||0)>m[ei])m[ei]=r[C.mtd_sale]||0;}); return Object.values(m).filter(x=>x===0).length; })(),
+    zeroSale: 0, // computed below
     vc: v.vc, ppt: v.ppt, agents: v.agents.size
   })).sort((a, b) => b.pct - a.pct);
 }
@@ -1223,6 +1231,29 @@ function drawRM() {
   const kpiHdrs = ['Avg TT','Avg VC','Avg PPT','Avg Eff.VC','Avg Eff.PPT','Avg Calls','Avg TP','Zero VC %','L1 on 0 Sale'];
   const a2map = {};
   arr2.forEach(r => a2map[r.name] = r);
+  // Compute zeroSale per RM using current month all-rows
+  const curMonth = D.maps.dates.length ? D.maps.dates[D.maps.dates.length-1].slice(0,7) : '';
+  const rmEmpSale = {}; // rmIdx -> {empIdx -> maxSale}
+  D.rows.forEach(r => {
+    if (r[C.desig] !== AI) return;
+    if (!passes(r)) return;
+    const ds = D.maps.dates[r[C.date]] || '';
+    if (!ds.startsWith(curMonth)) return;
+    const ri = r[C.rm]; if (ri < 0) return;
+    const ei = r[C.emp]; if (ei < 0) return;
+    if (!rmEmpSale[ri]) rmEmpSale[ri] = {};
+    if (rmEmpSale[ri][ei] === undefined) rmEmpSale[ri][ei] = 0;
+    const sale = r[C.mtd_sale] || 0;
+    if (sale > rmEmpSale[ri][ei]) rmEmpSale[ri][ei] = sale;
+  });
+  // Build rmName -> zeroSale lookup
+  const rmZeroMap = {};
+  Object.entries(rmEmpSale).forEach(([ri, empMap]) => {
+    const rName = D.maps.rms[ri];
+    rmZeroMap[rName] = Object.values(empMap).filter(v => v === 0).length;
+  });
+  arr1.forEach(r => { r.zeroSale = rmZeroMap[r.name] || 0; });
+
   // store for re-sort
   window._rmArr1 = arr1; window._rmArr2 = arr2; window._rmA2map = a2map;
   window._rmKpiCols = kpiCols; window._rmKpiHdrs = kpiHdrs;
@@ -1283,7 +1314,14 @@ function drawBranch() {
     const b = byLoc[li]; b.n++; b.tt.push(r[C.tt]); b.vc += r[C.vc]; b.ppt += r[C.ppt];
     if (r[C.zero_vc]  === 1) b.zvc++;
     if (r[C.zero_ppt] === 1) b.zppt++;
-    const ei=r[C.emp]; if(ei>=0){if(b.empSale[ei]===undefined)b.empSale[ei]=0;if((r[C.mtd_sale]||0)>b.empSale[ei])b.empSale[ei]=r[C.mtd_sale]||0;}
+    const ei=r[C.emp]; if(ei>=0){
+      const brDs=D.maps.dates[r[C.date]]||'';
+      const brCurM=D.maps.dates.length?D.maps.dates[D.maps.dates.length-1].slice(0,7):'';
+      if(brDs.startsWith(brCurM)){
+        if(b.empSale[ei]===undefined)b.empSale[ei]=0;
+        if((r[C.mtd_sale]||0)>b.empSale[ei])b.empSale[ei]=r[C.mtd_sale]||0;
+      }
+    }
   });
   const arr = Object.entries(byLoc).map(([li, v]) => ({
     name: D.maps.locs[li].replace(/NSD Channel Sales \(Tele\) /g, ''),
