@@ -574,6 +574,7 @@ body{background:linear-gradient(135deg,#fdf6f0 0%,#f0f3fa 45%,#edf5f0 100%) fixe
               <th onclick="sortS2('last')" style="cursor:pointer">Last Sale Date ↕</th>
               <th onclick="sortS2('avc')" style="cursor:pointer">Avg VC/Day ↕</th>
               <th onclick="sortS2('ppt')" style="cursor:pointer">Avg PPT/Day ↕</th>
+              <th onclick="sortS2('zeroSale')" style="cursor:pointer">L1 on 0 Sale ↕</th>
               <th>Agents</th>
             </tr></thead>
             <tbody id="s2-body"></tbody>
@@ -583,13 +584,14 @@ body{background:linear-gradient(135deg,#fdf6f0 0%,#f0f3fa 45%,#edf5f0 100%) fixe
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
             <span class="sn sn2">DRILL-DOWN</span>
             <span style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700" id="s2-drill-title">L1 Agents</span>
-            <button onclick="closeS2Drill()" style="margin-left:auto;padding:4px 12px;border-radius:6px;border:1.5px solid var(--bd);background:#fff;color:var(--t2);font-size:10px;cursor:pointer">✕ Close</button>
+            <button onclick="exportS2DrillCSV()" style="margin-left:auto;padding:5px 12px;border-radius:7px;border:none;background:linear-gradient(135deg,#10b981,#3b82f6);color:#fff;font-size:10px;font-weight:700;cursor:pointer">⬇ Export CSV</button>
+            <button onclick="closeS2Drill()" style="padding:4px 12px;border-radius:6px;border:1.5px solid var(--bd);background:#fff;color:var(--t2);font-size:10px;cursor:pointer">✕ Close</button>
           </div>
           <div style="overflow-x:auto">
             <table class="btbl" id="s2-drill-tbl" style="min-width:780px">
               <thead><tr>
                 <th>L1 Name</th><th>MTD Sales</th><th>Last Sale Date</th>
-                <th>MTD VC Count</th><th>Avg PPT/Day</th><th>Days on Zero VC</th>
+                <th>Tenure (Days)</th><th>MTD VC Count</th><th>Avg PPT/Day</th><th>Days on Zero VC</th>
               </tr></thead>
               <tbody id="s2-drill-body"></tbody>
             </table>
@@ -601,6 +603,32 @@ body{background:linear-gradient(135deg,#fdf6f0 0%,#f0f3fa 45%,#edf5f0 100%) fixe
     </div>
   </div>
 </div>
+
+<!-- Zero Sale Drill-Down Modal -->
+<div id="zs-modal-bg" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(30,35,64,.5);align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;padding:22px;width:780px;max-width:95vw;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(30,35,64,.25)">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-shrink:0">
+      <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#1e2340;flex:1" id="zs-modal-title">L1 Agents on 0 MTD Sale</div>
+      <span id="zs-modal-badge" style="font-family:'IBM Plex Mono',monospace;font-size:9px;background:#fce4ec;color:#c2185b;padding:3px 10px;border-radius:20px;font-weight:700"></span>
+      <button onclick="exportZSCSV()" style="padding:6px 14px;border-radius:7px;border:none;background:linear-gradient(135deg,#10b981,#3b82f6);color:#fff;font-size:10px;font-weight:700;cursor:pointer">⬇ Export CSV</button>
+      <div onclick="closeZSModal()" style="cursor:pointer;font-size:18px;color:#8b93b8;padding:2px 8px;border-radius:6px;border:1px solid #d4d9f0">✕</div>
+    </div>
+    <div style="overflow-y:auto;flex:1">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr>
+          <th style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;color:#fff;background:#1e2340;padding:7px 10px;text-align:left;position:sticky;top:0">#</th>
+          <th style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;color:#fff;background:#1e2340;padding:7px 10px;text-align:left;position:sticky;top:0">Agent Name</th>
+          <th style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;color:#fff;background:#1e2340;padding:7px 10px;text-align:center;position:sticky;top:0">Emp ID</th>
+          <th style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;color:#fff;background:#1e2340;padding:7px 10px;text-align:center;position:sticky;top:0">MTD Sales</th>
+          <th style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;color:#fff;background:#1e2340;padding:7px 10px;text-align:center;position:sticky;top:0">Last Sale Date</th>
+          <th style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;color:#fff;background:#1e2340;padding:7px 10px;text-align:center;position:sticky;top:0">Tenure (Days)</th>
+        </tr></thead>
+        <tbody id="zs-modal-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -1290,7 +1318,9 @@ function renderRMKpiTable() {
         const v = r[col];
         if (col==='avgTT') return fmtS(v);
         if (col==='zvcPct') return `<span class="pill ${v>30?'pill-n':'pill-y'}">${v}%</span>`;
-        if (col==='zeroSale') return `<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:${v>0?'#c2185b':'#2e7d32'}">${v}</span>`;
+        if (col==='zeroSale') return v>0
+          ? `<span onclick="openZSDrillRM('${r.name}')" style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:#c2185b;cursor:pointer;text-decoration:underline dotted" title="Click to see agents">${v} 🔍</span>`
+          : `<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:#2e7d32">0</span>`;
         return v;
       };
       return `<tr>
@@ -1405,7 +1435,10 @@ function renderBranchTable() {
         <td>${bbar(b.tPPT, mPPT, '#8b5cf6')}</td>
         <td><span class="zpill ${b.zvcPct > 30 ? 'hi' : 'lo'}">${b.zvcPct}%</span></td>
         <td><span class="zpill ${b.zpptPct > 30 ? 'hi' : 'lo'}">${b.zpptPct}%</span></td>
-        <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:${b.zeroSale>0?'#c2185b':'#2e7d32'}">${b.zeroSale}</td>
+        <td style="text-align:center">${b.zeroSale>0
+          ? `<span onclick="openZSDrillBranch('${b.name}')" style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#c2185b;cursor:pointer;text-decoration:underline dotted" title="Click to see agents">${b.zeroSale} 🔍</span>`
+          : `<span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#2e7d32">0</span>`
+        }</td>
       </tr>`;
     }).join('')
   }</tbody>`;
@@ -2262,6 +2295,7 @@ function drawS1() {
       <td style="text-align:center"><span style="background:${a.mtd>0?'linear-gradient(135deg,#10b981,#3b82f6)':'#f5f8fd'};color:${a.mtd>0?'#fff':'#8b93b8'};font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-block">${a.mtd}</span></td>
       <td><span style="display:inline-block;padding:3px 9px;border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;background:${sc.bg};color:${sc.color};border:1px solid ${sc.border}">${a.last}</span></td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#1565c0;text-align:center">${a.tenure}</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#1565c0;text-align:center">${a.tenure||'—'}</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#1565c0;text-align:center">${a.vc}</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#1565c0;text-align:center">${a.ppt}</td>
       <td style="text-align:center"><span class="pill ${a.zvc>0?'pill-n':'pill-y'}">${a.zvc}d</span></td>
@@ -2310,7 +2344,7 @@ function drawS2() {
     if (!byMgr[mgrName]) byMgr[mgrName] = { vcSum:0, pptSum:0, days:0, zvc:0, last:'', agents:new Set() };
     if (!byMgrL1[mgrName])         byMgrL1[mgrName] = {};
     if (!byMgrL1[mgrName][eid]) byMgrL1[mgrName][eid] = {
-      name: D.maps.enames[r[C.ename]]||'—', mtd:0, last:'', vc:0, pptSum:0, days:0, zvc:0
+      name: D.maps.enames[r[C.ename]]||'—', mtd:0, last:'', vc:0, pptSum:0, days:0, zvc:0, tenure:0
     };
 
     const m  = byMgr[mgrName];
@@ -2322,6 +2356,8 @@ function drawS2() {
     const rowLS = r[C.last_sale_date] || '';
     if (rowLS && rowLS > l1.last) l1.last = rowLS;
     if (rowLS && rowLS > m.last)  m.last  = rowLS;
+    const rowTen = r[C.tenure] || 0;
+    if (rowTen > l1.tenure) l1.tenure = rowTen;
     m.agents.add(eid);
 
     // Month-filtered VC/PPT
@@ -2338,17 +2374,19 @@ function drawS2() {
   let arr = Object.entries(byMgr).map(([mgrName, v]) => {
     const l1s = byMgrL1[mgrName] || {};
     const mtd = Object.values(l1s).reduce((s,l)=>s+l.mtd, 0);
+    const zeroSale = Object.values(l1s).filter(l=>l.mtd===0).length;
     return {
       name: mgrName, mtd,
       last: v.last || '—',
       avc:  v.days ? +(v.vcSum  / v.days).toFixed(2) : 0,
       ppt:  v.days ? +(v.pptSum / v.days).toFixed(2) : 0,
       zvc:  v.zvc,
+      zeroSale,
       agents: v.agents.size,
     };
   });
 
-  const fns = { name:a=>a.name, mtd:a=>a.mtd, last:a=>a.last, avc:a=>a.avc, ppt:a=>a.ppt, zvc:a=>a.zvc };
+  const fns = { name:a=>a.name, mtd:a=>a.mtd, last:a=>a.last, avc:a=>a.avc, ppt:a=>a.ppt, zvc:a=>a.zvc, zeroSale:a=>a.zeroSale };
   const fn  = fns[s2SortKey] || (a => a.mtd);
   arr = arr.sort((a,b)=>{
     const va=fn(a), vb=fn(b);
@@ -2370,6 +2408,10 @@ function drawS2() {
       <td><span style="display:inline-block;padding:3px 9px;border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;background:${sc2.bg};color:${sc2.color};border:1px solid ${sc2.border}">${a.last}</span></td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#1565c0;text-align:center">${a.avc}</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#1565c0;text-align:center">${a.ppt}</td>
+      <td style="text-align:center">${a.zeroSale>0
+        ? `<span onclick="openZSDrillL2('${a.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:#c2185b;cursor:pointer;text-decoration:underline dotted" title="Click to see agents">${a.zeroSale} 🔍</span>`
+        : `<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:#2e7d32">0</span>`
+      }</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#4b5680;text-align:center">${a.agents}</td>
     </tr>`;
   }).join('');
@@ -2389,10 +2431,12 @@ function openS2Drill(mgrName) {
   const arr = Object.entries(l1Data).map(([eid, v]) => ({
     eid, name: v.name, mtd: v.mtd,
     last: v.last || '—',
+    tenure: v.tenure || 0,
     vc:   +v.vc.toFixed(1),
     ppt:  v.days ? +(v.pptSum / v.days).toFixed(2) : 0,
     zvc:  v.zvc,
   })).sort((a,b) => b.mtd - a.mtd);
+  window._s2DrillArr = arr; // store for export
 
   const drillDates = [...new Set(arr.map(a=>a.last).filter(d=>d&&d!=='—'))].sort();
   document.getElementById('s2-drill-body').innerHTML = arr.map((a, i) => {
@@ -2471,6 +2515,125 @@ function dlCSV(data, filename) {
   a.href = URL.createObjectURL(new Blob([csv], {type: 'text/csv'}));
   a.download = filename;
   a.click();
+}
+
+
+// ═══════════════════════════════════════════════════════════════════
+// ZERO SALE DRILL-DOWN
+// ═══════════════════════════════════════════════════════════════════
+let _zsAgents = []; // stores current drill-down data for export
+
+function _buildZSAgents(filterFn, label) {
+  const curMonth = D.maps.dates.length ? D.maps.dates[D.maps.dates.length-1].slice(0,7) : '';
+  const byEmp = {}; // empIdx -> {mtd, last, name, eid}
+  D.rows.forEach(r => {
+    if (r[C.desig] !== AI) return;
+    if (!passes(r)) return;
+    const ds = D.maps.dates[r[C.date]] || '';
+    if (!ds.startsWith(curMonth)) return;
+    if (!filterFn(r)) return;
+    const ei = r[C.emp]; if (ei < 0) return;
+    if (!byEmp[ei]) byEmp[ei] = {
+      name: D.maps.enames[r[C.ename]] || '—',
+      eid:  D.maps.emps[ei] || '—',
+      mtd:  0, last: '', tenure: 0
+    };
+    const sale = r[C.mtd_sale] || 0;
+    if (sale > byEmp[ei].mtd) byEmp[ei].mtd = sale;
+    const ls = r[C.last_sale_date] || '';
+    if (ls && ls > byEmp[ei].last) byEmp[ei].last = ls;
+    // Tenure: take max (latest date row has highest/correct value)
+    const ten = r[C.tenure] || 0;
+    if (ten > byEmp[ei].tenure) byEmp[ei].tenure = ten;
+  });
+  // Only agents with mtd = 0
+  return Object.values(byEmp)
+    .filter(a => a.mtd === 0)
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function openZSDrillRM(rmName) {
+  const ri = D.maps.rms.indexOf(rmName);
+  if (ri < 0) return;
+  const agents = _buildZSAgents(r => r[C.rm] === ri, rmName);
+  _showZSModal('RM: ' + rmName, agents);
+}
+
+function openZSDrillBranch(locName) {
+  // locName may be shortened — match by contains
+  const li = D.maps.locs.findIndex(l => l.replace(/NSD Channel Sales \(Tele\) /g,'') === locName || l === locName);
+  if (li < 0) return;
+  const agents = _buildZSAgents(r => r[C.loc] === li, locName);
+  _showZSModal('Branch: ' + locName, agents);
+}
+
+function _showZSModal(title, agents) {
+  _zsAgents = agents;
+  document.getElementById('zs-modal-title').textContent = 'L1 on 0 MTD Sale — ' + title;
+  document.getElementById('zs-modal-badge').textContent = agents.length + ' agents';
+  const ROW_BG = ['#fff','#f8fafd'];
+  document.getElementById('zs-modal-body').innerHTML = agents.length
+    ? agents.map((a, i) => `<tr style="background:${ROW_BG[i%2]}">
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#8b93b8;padding:7px 10px;text-align:left">${i+1}</td>
+        <td style="font-weight:700;padding:7px 10px;text-align:left">${a.name}</td>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#4b5680;padding:7px 10px;text-align:center">${a.eid}</td>
+        <td style="text-align:center;padding:7px 10px"><span style="background:#fce4ec;color:#c2185b;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px">0</span></td>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#4b5680;padding:7px 10px;text-align:center">${a.last || '—'}</td>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;color:#1565c0;padding:7px 10px;text-align:center">${a.tenure || '—'}</td>
+      </tr>`).join('')
+    : '<tr><td colspan="5" style="text-align:center;padding:20px;color:#8b93b8;font-size:12px">No agents on 0 sale ✅</td></tr>';
+  const bg = document.getElementById('zs-modal-bg');
+  bg.style.display = 'flex';
+}
+
+function closeZSModal() {
+  document.getElementById('zs-modal-bg').style.display = 'none';
+}
+
+function exportZSCSV() {
+  const hdr = ['#','Agent Name','Emp ID','MTD Sales','Last Sale Date','Tenure (Days)'];
+  const rows = _zsAgents.map((a,i) => [i+1, a.name, a.eid, 0, a.last||'—', a.tenure||'—']);
+  const q = v => '"' + String(v).replace(/"/g,'""') + '"';
+  const csv = [hdr,...rows].map(r=>r.map(q).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = 'Zero_Sale_Agents.csv';
+  a.click();
+}
+
+// Close modal on background click
+document.getElementById('zs-modal-bg').addEventListener('click', function(e) {
+  if (e.target === this) closeZSModal();
+});
+
+
+// ── L2 Sales: drill into L1 agents on 0 sale for a manager ───────
+function openZSDrillL2(mgrName) {
+  const l1Data = (window._s2L1Data || {})[mgrName];
+  if (!l1Data) return;
+  const agents = Object.entries(l1Data)
+    .filter(([eid, v]) => v.mtd === 0)
+    .map(([eid, v]) => ({
+      eid, name: v.name, mtd: 0,
+      last: v.last || '—',
+      tenure: v.tenure || 0,
+    }))
+    .sort((a,b) => a.name.localeCompare(b.name));
+  _showZSModal('L2: ' + mgrName, agents);
+}
+
+// ── Export S2 drill-down (all L1 agents under clicked L2) ─────────
+function exportS2DrillCSV() {
+  const arr = window._s2DrillArr || [];
+  const title = document.getElementById('s2-drill-title').textContent.replace(' — L1 Agents','');
+  const hdr = ['Agent Name','Emp ID','MTD Sales','Last Sale Date','Tenure (Days)','MTD VC','Avg PPT/Day','Zero VC Days'];
+  const rows = arr.map(a => [a.name, a.eid, a.mtd, a.last||'—', a.tenure||'—', a.vc, a.ppt, a.zvc+'d']);
+  const q = v => '"' + String(v).replace(/"/g,'""') + '"';
+  const csv = [hdr,...rows].map(r=>r.map(q).join(',')).join('\n');
+  const el = document.createElement('a');
+  el.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  el.download = 'L2_Drill_' + title.replace(/[^a-z0-9]/gi,'_') + '.csv';
+  el.click();
 }
 
 </script>
