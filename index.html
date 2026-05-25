@@ -1008,6 +1008,19 @@ const KPI_DEF = [
 
 function kpiVals(a) { return KPI_DEF.map(k => avg(a.map(r => r[k.col]))); }
 
+
+// ── Count L1s on 0 MTD Sale (unique agents, max mtd_sale per agent) ──
+function countZeroSale(rows) {
+  const byEmp = {};
+  rows.forEach(r => {
+    const ei = r[C.emp]; if (ei < 0) return;
+    if (byEmp[ei] === undefined) byEmp[ei] = 0;
+    if ((r[C.mtd_sale] || 0) > byEmp[ei]) byEmp[ei] = r[C.mtd_sale] || 0;
+  });
+  const vals = Object.values(byEmp);
+  return { zero: vals.filter(v => v === 0).length, total: vals.length };
+}
+
 function drawKPI() {
   const rows = getRows(DS.d3), a = assocs(rows);
   const dateStr = D.maps.dates[DS.d3] || '';
@@ -1028,8 +1041,10 @@ function drawKPI() {
   const ltPPTCount = a.filter(r => (r[C.vc] + r[C.ppt]) < 1).length;
   const ltPPTPct   = a.length ? (ltPPTCount / a.length * 100).toFixed(1) : '0.0';
 
+  const zs = countZeroSale(assocs(getRows(DS.d3)));
+  const zsPct = zs.total ? (zs.zero/zs.total*100).toFixed(1) : '0.0';
   document.getElementById('kpi-stat-boxes').innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px">
       <div style="background:#fce4ec;border:1px solid #f48fb1;border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px">
         <div style="font-size:26px">🚫</div>
         <div style="flex:1">
@@ -1053,6 +1068,19 @@ function drawKPI() {
           </div>
           <div style="margin-top:6px;height:5px;background:rgba(255,255,255,.6);border-radius:3px">
             <div style="height:100%;width:${Math.min(ltPPTPct,100)}%;background:#ff9800;border-radius:3px"></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px">
+        <div style="font-size:26px">💰</div>
+        <div style="flex:1">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;color:#2e7d32;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">L1 Agents on 0 Sale</div>
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <span style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:#1b5e20">${zs.zero}</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4b5680">${zsPct}% · ${zs.total} agents</span>
+          </div>
+          <div style="margin-top:6px;height:5px;background:rgba(255,255,255,.6);border-radius:3px">
+            <div style="height:100%;width:${Math.min(zsPct,100)}%;background:#43a047;border-radius:3px"></div>
           </div>
         </div>
       </div>
@@ -1130,7 +1158,7 @@ function rmAgg(a, adhCol) {
     m.vc += r[C.vc]; m.ppt += r[C.ppt]; m.vc0tp += r[C.vc0tp];
     m.ppt0tp += r[C.ppt0tp]; m.eff += r[C.eff]; m.tp += r[C.tp];
     if (r[C.zero_vc] === 1) m.zvc++;
-    m.agents.add(r[C.emp]);
+    m.agents.add(r[C.emp]); if(!m.saleRows)m.saleRows=[]; m.saleRows.push(r);
   });
   return Object.entries(map).map(([ri, v]) => ({
     name: D.maps.rms[ri], n: v.n, comp: v.comp,
@@ -1140,6 +1168,7 @@ function rmAgg(a, adhCol) {
     avgEffVC: v.n ? +(v.vc0tp/v.n).toFixed(2) : 0, avgEffPPT: v.n ? +(v.ppt0tp/v.n).toFixed(2) : 0,
     avgEff: v.n ? +(v.eff/v.n).toFixed(2) : 0, avgTP: v.n ? +(v.tp/v.n).toFixed(1) : 0,
     zvcPct: v.n ? +(v.zvc/v.n*100).toFixed(1) : 0,
+    zeroSale: (() => { const m={}; (v.saleRows||[]).forEach(r=>{const ei=r[C.emp];if(ei<0)return;if(m[ei]===undefined)m[ei]=0;if((r[C.mtd_sale]||0)>m[ei])m[ei]=r[C.mtd_sale]||0;}); return Object.values(m).filter(x=>x===0).length; })(),
     vc: v.vc, ppt: v.ppt, agents: v.agents.size
   })).sort((a, b) => b.pct - a.pct);
 }
@@ -1190,28 +1219,58 @@ function drawRM() {
   });
 
   // RM KPI table
-  const kpiCols = ['avgTT','avgVC','avgPPT','avgEffVC','avgEffPPT','avgEff','avgTP','zvcPct'];
-  const kpiHdrs = ['Avg TT','Avg VC','Avg PPT','Avg Eff.VC','Avg Eff.PPT','Avg Calls','Avg TP','Zero VC %'];
+  const kpiCols = ['avgTT','avgVC','avgPPT','avgEffVC','avgEffPPT','avgEff','avgTP','zvcPct','zeroSale'];
+  const kpiHdrs = ['Avg TT','Avg VC','Avg PPT','Avg Eff.VC','Avg Eff.PPT','Avg Calls','Avg TP','Zero VC %','L1 on 0 Sale'];
   const a2map = {};
   arr2.forEach(r => a2map[r.name] = r);
-  document.getElementById('rm-kpi-tbl').innerHTML = `<thead><tr><th>RM</th><th>Agents</th>${kpiHdrs.map(h => `<th>${h}</th>`).join('')}<th>Adh-1%</th><th>Adh-2%</th></tr></thead><tbody>${
-    arr1.map(r => {
+  // store for re-sort
+  window._rmArr1 = arr1; window._rmArr2 = arr2; window._rmA2map = a2map;
+  window._rmKpiCols = kpiCols; window._rmKpiHdrs = kpiHdrs;
+  renderRMKpiTable();
+}
+function renderRMKpiTable() {
+  const arr1 = window._rmArr1 || [], arr2 = window._rmArr2 || [];
+  const a2map = window._rmA2map || {};
+  const kpiCols = window._rmKpiCols || [], kpiHdrs = window._rmKpiHdrs || [];
+  const allCols = ['name','agents',...kpiCols,'adh1','adh2'];
+  const allHdrs = ['RM','Agents',...kpiHdrs,'Adh-1%','Adh-2%'];
+  const sortFns = {
+    name: r=>r.name, agents: r=>r.agents,
+    avgTT:r=>r.avgTT, avgVC:r=>r.avgVC, avgPPT:r=>r.avgPPT,
+    avgEffVC:r=>r.avgEffVC, avgEffPPT:r=>r.avgEffPPT,
+    avgEff:r=>r.avgEff, avgTP:r=>r.avgTP, zvcPct:r=>r.zvcPct,
+    adh1:r=>r.pct, adh2:r=>(a2map[r.name]?a2map[r.name].pct:0),
+  };
+  const fn = sortFns[rmSortKey] || (r=>r.name);
+  const sorted = [...arr1].sort((a,b)=>{
+    const va=fn(a),vb=fn(b);
+    return typeof va==='string'? rmSortDir*va.localeCompare(vb): rmSortDir*(vb-va);
+  });
+  const thStyle = col => col===rmSortKey ? 'background:#2d3a5e;cursor:pointer' : 'cursor:pointer';
+  const arr = col => col===rmSortKey ? (rmSortDir===-1?' ▼':' ▲') : '';
+  const rmThead = '<thead><tr>' + allCols.map((col,i) => {
+    const st = col===rmSortKey ? 'background:#2d3a5e;cursor:pointer' : 'cursor:pointer';
+    const indicator = col===rmSortKey ? (rmSortDir===-1?' &#9660;':' &#9650;') : '';
+    return '<th onclick="sortRM(\'' + col + '\')" style="' + st + '">' + allHdrs[i] + indicator + '</th>';
+  }).join('') + '</tr></thead>';
+  document.getElementById('rm-kpi-tbl').innerHTML = rmThead + '<tbody>' + sorted.map(r => {
       const a2r = a2map[r.name];
       const kv = col => {
         const v = r[col];
-        if (col === 'avgTT') return fmtS(v);
-        if (col === 'zvcPct') return `<span class="pill ${v > 30 ? 'pill-n' : 'pill-y'}">${v}%</span>`;
+        if (col==='avgTT') return fmtS(v);
+        if (col==='zvcPct') return `<span class="pill ${v>30?'pill-n':'pill-y'}">${v}%</span>`;
+        if (col==='zeroSale') return `<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:${v>0?'#c2185b':'#2e7d32'}">${v}</span>`;
         return v;
       };
       return `<tr>
         <td style="font-weight:700">${r.name}</td>
         <td style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#4b5680">${r.agents}</td>
-        ${kpiCols.map(col => `<td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#1565c0">${kv(col)}</td>`).join('')}
-        <td><span class="pill ${r.pct >= 50 ? 'pill-y' : 'pill-n'}">${r.pct}%</span></td>
-        <td><span class="pill ${a2r && a2r.pct >= 50 ? 'pill-y' : 'pill-n'}">${a2r ? a2r.pct + '%' : '—'}</span></td>
+        ${kpiCols.map(col=>'<td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;font-weight:700;color:#1565c0">'+kv(col)+'</td>').join('')}
+        <td><span class="pill ${r.pct>=50?'pill-y':'pill-n'}">${r.pct}%</span></td>
+        <td><span class="pill ${a2r&&a2r.pct>=50?'pill-y':'pill-n'}">${a2r?a2r.pct+'%':'—'}</span></td>
       </tr>`;
-    }).join('')
-  }</tbody>`;
+    }).join('') + '</tbody>';
+  // placeholder close brace removed — handled above
 }
 
 // ─── BRANCH ─────────────────────────────────────────────────────────
@@ -1220,10 +1279,11 @@ function drawBranch() {
   const byLoc = {};
   a.forEach(r => {
     const li = r[C.loc]; if (li < 0) return;
-    if (!byLoc[li]) byLoc[li] = { n: 0, tt: [], vc: 0, ppt: 0, zvc: 0, zppt: 0 };
+    if (!byLoc[li]) byLoc[li] = { n: 0, tt: [], vc: 0, ppt: 0, zvc: 0, zppt: 0, empSale: {} };
     const b = byLoc[li]; b.n++; b.tt.push(r[C.tt]); b.vc += r[C.vc]; b.ppt += r[C.ppt];
     if (r[C.zero_vc]  === 1) b.zvc++;
     if (r[C.zero_ppt] === 1) b.zppt++;
+    const ei=r[C.emp]; if(ei>=0){if(b.empSale[ei]===undefined)b.empSale[ei]=0;if((r[C.mtd_sale]||0)>b.empSale[ei])b.empSale[ei]=r[C.mtd_sale]||0;}
   });
   const arr = Object.entries(byLoc).map(([li, v]) => ({
     name: D.maps.locs[li].replace(/NSD Channel Sales \(Tele\) /g, ''),
@@ -1231,6 +1291,7 @@ function drawBranch() {
     avgVC: v.n ? +(v.vc/v.n).toFixed(3) : 0, avgPPT: v.n ? +(v.ppt/v.n).toFixed(3) : 0,
     tVC: v.vc, tPPT: v.ppt,
     zvcPct: v.n ? +(v.zvc/v.n*100).toFixed(1) : 0, zpptPct: v.n ? +(v.zppt/v.n*100).toFixed(1) : 0,
+    zeroSale: Object.values(v.empSale||{}).filter(x=>x===0).length,
   }));
   if (!arr.length) { document.getElementById('br-hi').innerHTML = '<div class="nodata">No data</div>'; return; }
 
@@ -1252,12 +1313,47 @@ function drawBranch() {
       <div class="hc worst"><div class="hm">⚠️ Lowest Avg PPT</div><div class="hn">${mnPPT.name}</div><div class="hv">${mnPPT.avgPPT.toFixed(2)}/agent</div><div class="hs">Total: ${mnPPT.tPPT}</div></div>
     </div>`;
 
-  const sorted = [...arr].sort((a, b) => b.avgTT - a.avgTT);
+  // store for re-sort
+  window._brArr  = arr;
+  window._brMeta = {
+    mxTT: arr.reduce((a,b)=>b.avgTT>a.avgTT?b:a),
+    mnTT: arr.reduce((a,b)=>b.avgTT<a.avgTT?b:a),
+  };
+  renderBranchTable();
+}
+function renderBranchTable() {
+  const arr = window._brArr || [];
+  if (!arr.length) return;
+  const sortFnsBr = {
+    name:b=>b.name, n:b=>b.n, avgTT:b=>b.avgTT, avgVC:b=>b.avgVC,
+    avgPPT:b=>b.avgPPT, tVC:b=>b.tVC, tPPT:b=>b.tPPT,
+    zvcPct:b=>b.zvcPct, zpptPct:b=>b.zpptPct,
+  };
+  const fn = sortFnsBr[brSortKey] || (b=>b.avgTT);
+  const sorted = [...arr].sort((a,b)=>{
+    const va=fn(a),vb=fn(b);
+    return typeof va==='string'? brSortDir*va.localeCompare(vb): brSortDir*(vb-va);
+  });
+  const meta = window._brMeta || {};
+  const mxTT = meta.mxTT || sorted[0] || {};
+  const mnTT = meta.mnTT || sorted[sorted.length-1] || {};
   const mVC = Math.max(...sorted.map(b => b.tVC)), mPPT = Math.max(...sorted.map(b => b.tPPT));
   const mZVC = Math.max(...sorted.map(b => b.zvcPct)), mZPPT = Math.max(...sorted.map(b => b.zpptPct));
   const bbar = (v, mx, col) => `<div style="display:flex;align-items:center;gap:5px"><div style="height:5px;border-radius:3px;width:${mx?Math.round(v/mx*70):0}px;background:${col}40;border:1px solid ${col}88"></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700">${v}</span></div>`;
 
-  document.getElementById('br-tbl').innerHTML = `<thead><tr><th>#</th><th>Branch</th><th>Agents</th><th>Avg TT</th><th>Avg VC</th><th>Avg PPT</th><th>Total VC</th><th>Total PPT</th><th>% Zero VC</th><th>% Zero PPT</th></tr></thead><tbody>${
+  document.getElementById('br-tbl').innerHTML = `<thead><tr>
+        <th>#</th>
+        <th onclick="sortBR('name')" style="cursor:pointer">Branch${''}</th>
+        <th onclick="sortBR('n')" style="cursor:pointer">Agents</th>
+        <th onclick="sortBR('avgTT')" style="cursor:pointer">Avg TT${brSortKey==='avgTT'?(brSortDir===-1?' ▼':' ▲'):''}</th>
+        <th onclick="sortBR('avgVC')" style="cursor:pointer">Avg VC</th>
+        <th onclick="sortBR('avgPPT')" style="cursor:pointer">Avg PPT</th>
+        <th onclick="sortBR('tVC')" style="cursor:pointer">Total VC</th>
+        <th onclick="sortBR('tPPT')" style="cursor:pointer">Total PPT</th>
+        <th onclick="sortBR('zvcPct')" style="cursor:pointer">% Zero VC</th>
+        <th onclick="sortBR('zpptPct')" style="cursor:pointer">% Zero PPT</th>
+        <th onclick="sortBR('zeroSale')" style="cursor:pointer">L1 on 0 Sale</th>
+      </tr></thead><tbody>${
     sorted.map((b, i) => {
       const isBest = b.name === mxTT.name, isWorst = b.name === mnTT.name;
       return `<tr class="${isBest ? 'best' : isWorst ? 'worst' : ''}">
@@ -1271,6 +1367,7 @@ function drawBranch() {
         <td>${bbar(b.tPPT, mPPT, '#8b5cf6')}</td>
         <td><span class="zpill ${b.zvcPct > 30 ? 'hi' : 'lo'}">${b.zvcPct}%</span></td>
         <td><span class="zpill ${b.zpptPct > 30 ? 'hi' : 'lo'}">${b.zpptPct}%</span></td>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:${b.zeroSale>0?'#c2185b':'#2e7d32'}">${b.zeroSale}</td>
       </tr>`;
     }).join('')
   }</tbody>`;
@@ -1959,6 +2056,8 @@ function toast(msg, err = false) {
 const msS1 = {}, msS2 = {};
 let s1SortKey = 'mtd', s1SortDir = -1;
 let s2SortKey = 'mtd', s2SortDir = -1;
+let rmSortKey = 'name', rmSortDir = 1;
+let brSortKey = 'avgTT', brSortDir = -1;
 
 // Build unique month list from dates in data
 function getMonthOpts() {
@@ -2025,6 +2124,16 @@ function saleColor(dateStr, allDates) {
   else if (pct <= 0.66) return { bg:'#fffde7', color:'#f57f17', border:'#fff176' }; // yellow
   else if (pct <= 0.83) return { bg:'#e8f5e9', color:'#2e7d32', border:'#a5d6a7' }; // light green
   else                  return { bg:'#c8e6c9', color:'#1b5e20', border:'#81c784' }; // darkest green
+}
+
+
+function sortRM(key) {
+  if (rmSortKey === key) rmSortDir *= -1; else { rmSortKey = key; rmSortDir = -1; }
+  renderRMKpiTable();
+}
+function sortBR(key) {
+  if (brSortKey === key) brSortDir *= -1; else { brSortKey = key; brSortDir = -1; }
+  renderBranchTable();
 }
 
 function drawS1() {
