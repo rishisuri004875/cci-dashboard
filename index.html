@@ -403,6 +403,28 @@ body{background:linear-gradient(135deg,#fdf6f0 0%,#f0f3fa 45%,#edf5f0 100%) fixe
   color:#1e2340;flex:1}
 .hub-modal-body{overflow-y:auto;flex:1}
 
+
+/* ── Hub button blinking arrow ── */
+@keyframes hubArrowBlink {
+  0%,100% { opacity:1; transform:translateX(0); }
+  50%      { opacity:.3; transform:translateX(5px); }
+}
+.hub-arrow {
+  display:inline-block;
+  animation: hubArrowBlink 0.9s ease-in-out infinite;
+  font-size:18px;
+  margin-left:6px;
+  vertical-align:middle;
+}
+@keyframes hubBtnPulse {
+  0%,100% { box-shadow:0 3px 10px rgba(59,91,219,.35), 0 0 0 0 rgba(59,91,219,.5); }
+  50%      { box-shadow:0 3px 10px rgba(59,91,219,.35), 0 0 0 8px rgba(59,91,219,.0); }
+}
+#hub-topbar-btn {
+  animation: hubBtnPulse 2s ease-in-out infinite;
+}
+#hub-topbar-btn:hover { animation: none; }
+
 </style>
 </head>
 <body>
@@ -495,7 +517,7 @@ body{background:linear-gradient(135deg,#fdf6f0 0%,#f0f3fa 45%,#edf5f0 100%) fixe
       </span>
       <span>Updated: <span id="ut">—</span></span>
     </div>
-    <button id="hub-topbar-btn" onclick="hubSwitch('hub')" style="padding:10px 26px;border-radius:9px;border:none;cursor:pointer;background:linear-gradient(135deg,#3b5bdb,#2f4ac7);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;box-shadow:0 3px 10px rgba(59,91,219,.35);transition:all .15s;white-space:nowrap;margin-right:12px;letter-spacing:.2px">🔬 Branch Insights Hub</button>
+    <button id="hub-topbar-btn" onclick="hubSwitch('hub')" style="padding:13px 32px;border-radius:10px;border:none;cursor:pointer;background:linear-gradient(135deg,#2563eb,#1e40af);color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;transition:all .15s;white-space:nowrap;margin-right:12px;letter-spacing:.3px;position:relative">🔬 Branch Insights Hub<span class="hub-arrow">▶</span></button>
   </div>
 
   <div id="kpis">
