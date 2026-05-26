@@ -288,6 +288,121 @@ body{background:linear-gradient(135deg,#fdf6f0 0%,#f0f3fa 45%,#edf5f0 100%) fixe
 .btbl#l2-tbl td:not(:first-child) {
   text-align:center!important;
 }
+
+/* ══ BRANCH INSIGHTS HUB ═══════════════════════════════════════════ */
+#hub-nav{display:flex;gap:0;background:#fff;border-bottom:2px solid #d4d9f0;
+  box-shadow:0 2px 8px rgba(59,130,246,.08);flex-wrap:wrap}
+.hub-btn{flex:1;min-width:200px;padding:10px 16px;border:none;background:transparent;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;
+  color:#8b93b8;border-bottom:3px solid transparent;transition:all .18s;white-space:nowrap}
+.hub-btn.active{color:#1e2340;border-bottom-color:#3b82f6;
+  background:linear-gradient(180deg,rgba(59,130,246,.06),transparent);font-weight:700}
+.hub-btn:hover:not(.active){color:#3b82f6}
+
+#hub-crown-btn .crown-sub{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:8px;
+  font-weight:400;opacity:.8;letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+#branch-panel{display:none;background:linear-gradient(135deg,#fdf6f0,#f0f3fa,#edf5f0) fixed}
+/* Filter ribbon */
+#hub-filters{position:sticky;top:0;z-index:100;background:#fff;
+  border-bottom:1px solid #d4d9f0;padding:8px 20px;
+  display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;
+  box-shadow:0 2px 6px rgba(59,130,246,.06)}
+.hf-group{display:flex;flex-direction:column;gap:3px;min-width:130px}
+.hf-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;
+  color:#4b5680;text-transform:uppercase;letter-spacing:.5px}
+.hf-ms{border:1.5px solid #d4d9f0;border-radius:7px;background:#fff;min-height:28px;cursor:pointer}
+.hub-reset{padding:6px 14px;border-radius:7px;border:1.5px solid #d4d9f0;
+  background:#fff;color:#4b5680;font-size:10px;cursor:pointer;align-self:flex-end;font-weight:600}
+/* KPI cards */
+.hub-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:14px 20px 0}
+.hkc{background:#fff;border:1px solid #d4d9f0;border-radius:11px;padding:12px 14px;
+  position:relative;overflow:hidden;box-shadow:0 2px 6px rgba(59,130,246,.05)}
+.hkc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.hkc:nth-child(1)::before{background:linear-gradient(90deg,#3b82f6,#8b5cf6)}
+.hkc:nth-child(2)::before{background:linear-gradient(90deg,#10b981,#3b82f6)}
+.hkc:nth-child(3)::before{background:linear-gradient(90deg,#f59e0b,#ef4444)}
+.hkc:nth-child(4)::before{background:linear-gradient(90deg,#8b5cf6,#ec4899)}
+.hkc:nth-child(5)::before{background:linear-gradient(90deg,#14b8a6,#10b981)}
+.hkc-lbl{font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.4px;
+  text-transform:uppercase;color:#4b5680;margin-bottom:6px;font-weight:700}
+.hkc-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#1e2340;margin-bottom:2px}
+.hkc-hist{font-family:'IBM Plex Mono',monospace;font-size:8px;color:#8b93b8;margin-bottom:2px}
+.hkc-best{font-family:'IBM Plex Mono',monospace;font-size:8px;
+  color:#2e7d32;background:#e8f5e9;padding:2px 6px;border-radius:4px;display:inline-block}
+/* Hub sections */
+.hub-section{margin:12px 20px 0;background:#fff;border:1px solid #d4d9f0;
+  border-radius:11px;padding:12px 16px;box-shadow:0 2px 6px rgba(59,130,246,.04)}
+.hub-sh{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;
+  background:linear-gradient(135deg,#eef2ff,#f0fdf4);padding:7px 12px;
+  border-radius:8px;border-left:4px solid #3b82f6}
+.hub-sn{font-family:'IBM Plex Mono',monospace;font-size:8px;color:#fff;
+  padding:3px 9px;border-radius:20px;font-weight:700;
+  background:linear-gradient(135deg,#3b82f6,#8b5cf6)}
+.hub-st{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#1e2340}
+.hub-ss{font-size:9px;color:#8b93b8;margin-left:auto;font-family:'IBM Plex Mono',monospace}
+/* Zero VC alarm */
+.zvc-alarm{background:linear-gradient(135deg,#fce4ec,#fff3e0);border:2px solid #f48fb1;
+  border-radius:12px;padding:16px 20px;cursor:pointer;transition:all .2s;text-align:center}
+.zvc-alarm:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(194,24,91,.15)}
+.zvc-big{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:#c2185b;line-height:1}
+.zvc-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;color:#c2185b;
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.zvc-trend{display:flex;gap:4px;justify-content:center;align-items:center;margin-top:8px;flex-wrap:wrap}
+.zvc-dot{width:28px;height:28px;border-radius:50%;background:#c2185b;display:flex;
+  align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;
+  font-size:9px;font-weight:700;color:#fff}
+/* Vintage cohort */
+.vint-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.vc-card{border-radius:10px;padding:14px;cursor:pointer;transition:all .2s;
+  border:2px solid transparent;text-align:center}
+.vc-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.vc-card:nth-child(1){background:#fce4ec;border-color:#f48fb1}
+.vc-card:nth-child(2){background:#fff3e0;border-color:#ffcc80}
+.vc-card:nth-child(3){background:#e3f2fd;border-color:#90caf9}
+.vc-card:nth-child(4){background:#e8f5e9;border-color:#a5d6a7}
+.vc-count{font-family:'Syne',sans-serif;font-size:32px;font-weight:800}
+.vc-card:nth-child(1) .vc-count{color:#c2185b}
+.vc-card:nth-child(2) .vc-count{color:#e65100}
+.vc-card:nth-child(3) .vc-count{color:#1565c0}
+.vc-card:nth-child(4) .vc-count{color:#2e7d32}
+.vc-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+.vc-sub{font-size:9px;color:#4b5680;margin-top:4px;font-family:'IBM Plex Mono',monospace}
+/* Hub bottom graphs */
+.hub-graphs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 20px 0}
+.hub-graph-card{background:#fff;border:1px solid #d4d9f0;border-radius:11px;
+  padding:12px 14px;box-shadow:0 2px 6px rgba(59,130,246,.04)}
+.hub-graph-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  color:#1e2340;margin-bottom:10px}
+/* Insights panel (sidebar-like within hub) */
+.hub-insights{background:#fff;border:1px solid #d4d9f0;border-radius:11px;
+  padding:12px 14px;margin:12px 20px 20px;box-shadow:0 2px 6px rgba(59,130,246,.04)}
+.ins-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;
+  border-bottom:1px solid #f0f3fa}
+.ins-row:last-child{border-bottom:none}
+.ins-badge{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;
+  padding:3px 8px;border-radius:5px;white-space:nowrap;min-width:28px;text-align:center}
+.ins-badge.A{background:#e3f2fd;color:#1565c0}
+.ins-badge.B{background:#e8f5e9;color:#2e7d32}
+.ins-badge.C{background:#fce4ec;color:#c2185b}
+.ins-badge.D{background:#fff3e0;color:#e65100}
+.ins-badge.E{background:#ede7f6;color:#6a1b9a}
+.ins-badge.F{background:#fff8e1;color:#f57f17}
+.ins-badge.G{background:#e0f2f1;color:#00695c}
+.ins-text{font-size:11px;color:#1e2340;line-height:1.5;flex:1}
+.ins-text strong{color:#1e2340}
+/* Hub modal (reuses zs-modal pattern) */
+#hub-modal-bg{display:none;position:fixed;inset:0;z-index:600;
+  background:rgba(30,35,64,.5);align-items:center;justify-content:center}
+.hub-modal-box{background:#fff;border-radius:14px;padding:22px;width:820px;
+  max-width:95vw;max-height:85vh;display:flex;flex-direction:column;
+  box-shadow:0 20px 60px rgba(30,35,64,.25)}
+.hub-modal-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-shrink:0}
+.hub-modal-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;
+  color:#1e2340;flex:1}
+.hub-modal-body{overflow-y:auto;flex:1}
+
 </style>
 </head>
 <body>
@@ -353,6 +468,8 @@ body{background:linear-gradient(135deg,#fdf6f0 0%,#f0f3fa 45%,#edf5f0 100%) fixe
 </aside>
 
 <!-- MAIN -->
+
+<div id="ops-panel">
 <div id="main">
   <div id="topbar">
     <div>
@@ -378,6 +495,7 @@ body{background:linear-gradient(135deg,#fdf6f0 0%,#f0f3fa 45%,#edf5f0 100%) fixe
       </span>
       <span>Updated: <span id="ut">—</span></span>
     </div>
+    <button id="hub-topbar-btn" onclick="hubSwitch('hub')" style="padding:10px 26px;border-radius:9px;border:none;cursor:pointer;background:linear-gradient(135deg,#3b5bdb,#2f4ac7);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;box-shadow:0 3px 10px rgba(59,91,219,.35);transition:all .15s;white-space:nowrap;margin-right:12px;letter-spacing:.2px">🔬 Branch Insights Hub</button>
   </div>
 
   <div id="kpis">
@@ -531,7 +649,6 @@ body{background:linear-gradient(135deg,#fdf6f0 0%,#f0f3fa 45%,#edf5f0 100%) fixe
               <th onclick="sortS1('last')" style="cursor:pointer">Last Sale Date ↕</th>
               <th onclick="sortS1('tenure')" style="cursor:pointer">Tenure (Days) ↕</th>
               <th onclick="sortS1('vc')" style="cursor:pointer">MTD VC Count ↕</th>
-              <th onclick="sortS1('ppt')" style="cursor:pointer">Avg PPT/Day ↕</th>
               <th onclick="sortS1('zvc')" style="cursor:pointer">Days on Zero VC ↕</th>
             </tr></thead>
             <tbody id="s1-body"></tbody>
@@ -629,7 +746,112 @@ body{background:linear-gradient(135deg,#fdf6f0 0%,#f0f3fa 45%,#edf5f0 100%) fixe
   </div>
 </div>
 
-<div id="toast"></div>
+
+<div id="branch-panel" style="display:none;margin-left:210px;flex:1;min-height:100vh;background:linear-gradient(135deg,#fdf6f0,#f0f3fa,#edf5f0)">
+
+  <!-- Back Button -->
+  <div style="padding:8px 20px;background:#fff;border-bottom:1px solid #d4d9f0;display:flex;align-items:center;gap:12px">
+    <button onclick="hubSwitch('ops')" style="padding:9px 22px;border-radius:9px;border:none;background:linear-gradient(135deg,#1e2340,#3b5bdb);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 3px 10px rgba(30,35,64,.25);transition:all .15s">← Back to CCI Dashboard</button>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#4b5680">Unified Branch Insights Hub</span>
+  </div>
+
+  <!-- Sticky Filter Ribbon -->
+  <div id="hub-filters">
+    <div class="hf-group">
+      <div class="hf-lbl">Week</div>
+      <div class="ms-wrap hf-ms" id="hf-week" style="min-width:110px"></div>
+    </div>
+    <div class="hf-group">
+      <div class="hf-lbl">Date</div>
+      <div class="ms-wrap hf-ms" id="hf-date" style="min-width:110px"></div>
+    </div>
+    <div class="hf-group">
+      <div class="hf-lbl">Location</div>
+      <div class="ms-wrap hf-ms" id="hf-loc" style="min-width:140px"></div>
+    </div>
+    <div class="hf-group">
+      <div class="hf-lbl">Vintage</div>
+      <div class="ms-wrap hf-ms" id="hf-vint" style="min-width:110px"></div>
+    </div>
+    <div class="hf-group">
+      <div class="hf-lbl">RM</div>
+      <div class="ms-wrap hf-ms" id="hf-rm" style="min-width:130px"></div>
+    </div>
+    <button class="hub-reset" onclick="hubReset()">↺ Reset</button>
+    <span id="hub-filter-lbl" style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#4b5680;align-self:flex-end;padding-bottom:6px"></span>
+  </div>
+
+  <!-- Component A: Adh-1 Bar Chart -->
+  <div class="hub-section">
+    <div class="hub-sh"><span class="hub-sn">ADH</span><span class="hub-st">Adherence-1 Performance — Filtered Associates</span><span class="hub-ss" id="hub-adh-lbl"></span></div>
+    <div style="position:relative;height:260px"><canvas id="hub-c1"></canvas></div>
+  </div>
+
+  <!-- Component B: 5 KPI Cards -->
+  <div class="hub-kpis" id="hub-kpis"></div>
+
+  <!-- Zero VC Alarm + Vintage Cohort side by side -->
+  <div style="display:grid;grid-template-columns:320px 1fr;gap:12px;margin:12px 20px 0">
+
+    <!-- Component C: Zero VC Alarm -->
+    <div class="hub-section" style="margin:0">
+      <div class="hub-sh"><span class="hub-sn" style="background:linear-gradient(135deg,#ef4444,#f97316)">ALARM</span><span class="hub-st">L1 on 0 VC</span></div>
+      <div class="zvc-alarm" onclick="openHubZVCDrill()">
+        <div class="zvc-lbl">Agents with 0 VC Today</div>
+        <div class="zvc-big" id="hub-zvc-count">—</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#4b5680;margin-top:4px">Click to view agents</div>
+        <div class="zvc-trend" id="hub-zvc-trend"></div>
+        <div style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#4b5680">
+          Lowest Ever: <strong id="hub-zvc-best" style="color:#2e7d32">—</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Component D: Vintage Cohort -->
+    <div class="hub-section" style="margin:0">
+      <div class="hub-sh"><span class="hub-sn" style="background:linear-gradient(135deg,#f59e0b,#ec4899)">COHORT</span><span class="hub-st">L1 on 0 Sale — Vintage Breakdown</span></div>
+      <div class="vint-grid" id="hub-vint-grid"></div>
+    </div>
+  </div>
+
+  <!-- Insights Radar Panel -->
+  <div class="hub-insights">
+    <div class="hub-sh"><span class="hub-sn" style="background:linear-gradient(135deg,#1e2340,#3b82f6)">RADAR</span><span class="hub-st">Smart Insights — Automated Intelligence</span></div>
+    <div id="hub-insights-body"></div>
+  </div>
+
+  <!-- Bottom Graphs -->
+  <div class="hub-graphs">
+    <div class="hub-graph-card">
+      <div class="hub-graph-title">📊 Avg MTD Sales by Vintage Cohort <span style="font-size:9px;color:#8b93b8;font-family:'IBM Plex Mono',monospace">(click bar for agents)</span></div>
+      <div id="hub-vint-overall" style="font-family:'IBM Plex Mono',monospace;font-size:11px;padding:4px 0 6px;color:#4b5680"></div>
+      <div style="position:relative;height:220px"><canvas id="hub-c-vint"></canvas></div>
+    </div>
+    <div class="hub-graph-card">
+      <div class="hub-graph-title">📈 7-Day VC · PPT · 0-VC Trend <span style="font-size:9px;color:#8b93b8;font-family:'IBM Plex Mono',monospace">(Location filter only · dual axis)</span></div>
+      <div style="position:relative;height:240px"><canvas id="hub-c-trend"></canvas></div>
+    </div>
+  </div>
+
+</div><!-- /branch-panel -->
+
+<!-- Hub Modal -->
+<div id="hub-modal-bg" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(30,35,64,.5);align-items:center;justify-content:center">
+  <div class="hub-modal-box">
+    <div class="hub-modal-hdr">
+      <div class="hub-modal-title" id="hub-modal-title">Agents</div>
+      <span id="hub-modal-badge" style="font-family:'IBM Plex Mono',monospace;font-size:9px;background:#e3f2fd;color:#1565c0;padding:3px 10px;border-radius:20px;font-weight:700"></span>
+      <button onclick="exportHubModalCSV()" style="padding:5px 12px;border-radius:7px;border:none;background:linear-gradient(135deg,#10b981,#3b82f6);color:#fff;font-size:10px;font-weight:700;cursor:pointer">⬇ Export CSV</button>
+      <div onclick="closeHubModal()" style="cursor:pointer;font-size:18px;color:#8b93b8;padding:2px 8px;border-radius:6px;border:1px solid #d4d9f0;margin-left:4px">✕</div>
+    </div>
+    <div class="hub-modal-body">
+      <table style="width:100%;border-collapse:collapse;font-size:12px" id="hub-modal-tbl">
+        <thead id="hub-modal-thead"></thead>
+        <tbody id="hub-modal-body-rows"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 <script>
 // ─── DATA ───────────────────────────────────────────────────────────
@@ -2294,10 +2516,8 @@ function drawS1() {
       <td style="font-weight:700">${a.name}<div style="font-size:8px;color:#8b93b8;font-family:'IBM Plex Mono',monospace">${a.eid}</div></td>
       <td style="text-align:center"><span style="background:${a.mtd>0?'linear-gradient(135deg,#10b981,#3b82f6)':'#f5f8fd'};color:${a.mtd>0?'#fff':'#8b93b8'};font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-block">${a.mtd}</span></td>
       <td><span style="display:inline-block;padding:3px 9px;border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;background:${sc.bg};color:${sc.color};border:1px solid ${sc.border}">${a.last}</span></td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#1565c0;text-align:center">${a.tenure}</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#1565c0;text-align:center">${a.tenure||'—'}</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#1565c0;text-align:center">${a.vc}</td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#1565c0;text-align:center">${a.ppt}</td>
       <td style="text-align:center"><span class="pill ${a.zvc>0?'pill-n':'pill-y'}">${a.zvc}d</span></td>
     </tr>`;
   }).join('');
@@ -2467,7 +2687,7 @@ function closeS2Drill() {
 // ── CSV EXPORT for L1 Sales ──────────────────────────────────────
 function exportS1CSV() {
   // DOM: td[0]=Name+EmpID, td[1]=MTD, td[2]=LastSale, td[3]=Tenure, td[4]=VC, td[5]=PPT, td[6]=ZVC
-  const hdr = ['Agent Name','Emp ID','MTD Sales','Last Sale Date','Tenure (Days)','MTD VC Count','Avg PPT/Day','Zero VC Days'];
+  const hdr = ['Agent Name','Emp ID','MTD Sales','Last Sale Date','Tenure (Days)','MTD VC Count','Zero VC Days'];
   const rows = [];
   document.querySelectorAll('#s1-body tr').forEach(tr => {
     const cells = tr.querySelectorAll('td');
@@ -2485,8 +2705,7 @@ function exportS1CSV() {
       getSpan(cells[2]),              // Last Sale Date
       cells[3] ? cells[3].textContent.trim() : '',  // Tenure
       cells[4] ? cells[4].textContent.trim() : '',  // MTD VC Count
-      cells[5] ? cells[5].textContent.trim() : '',  // Avg PPT/Day
-      getSpan(cells[6]),              // Zero VC Days
+      cells[5] ? cells[5].querySelector('span') ? cells[5].querySelector('span').textContent.trim() : cells[5].textContent.trim() : '',  // Zero VC Days
     ]);
   });
   dlCSV([hdr, ...rows], 'L1_Sales_Dashboard.csv');
@@ -2635,5 +2854,713 @@ function exportS2DrillCSV() {
   el.download = 'L2_Drill_' + title.replace(/[^a-z0-9]/gi,'_') + '.csv';
   el.click();
 }
+
+
+// ═══════════════════════════════════════════════════════════════════
+// UNIFIED BRANCH INSIGHTS HUB
+// ═══════════════════════════════════════════════════════════════════
+
+// ── Hub filter state ────────────────────────────────────────────────
+const HFS = { week:new Set(), date:new Set(), loc:new Set(), vint:new Set(), rm:new Set() };
+const msHub = {};
+let _hubChartVint = null, _hubChartTrend = null, _hubChartAdh = null;
+let _hubModalData = [], _hubModalCols = [], _hubModalHdrs = [];
+
+// ── Hub nav switch ──────────────────────────────────────────────────
+function hubSwitch(which) {
+  const ops    = document.getElementById('ops-panel');
+  const branch = document.getElementById('branch-panel');
+  const topBtn = document.getElementById('hub-topbar-btn');
+  // Reset nav buttons
+  ['ops','sales'].forEach(k => {
+    const btn = document.getElementById('hbtn-'+k);
+    if (btn) btn.classList.remove('active');
+  });
+  if (which === 'hub') {
+    if (ops)    ops.style.display    = 'none';
+    if (branch) branch.style.display = 'block';
+    if (topBtn) topBtn.style.background = 'linear-gradient(135deg,#1530a0,#1e2340)';
+    renderHub();
+  } else {
+    if (branch) branch.style.display = 'none';
+    if (ops)    ops.style.display    = 'block';
+    if (topBtn) topBtn.style.background = 'linear-gradient(135deg,#3b5bdb,#2f4ac7)';
+    document.getElementById('hbtn-ops') && document.getElementById('hbtn-ops').classList.toggle('active', which==='ops');
+    if (which === 'sales') {
+      const sBtn = document.querySelector('.tn[onclick*="tS1"]');
+      if (sBtn) { document.querySelectorAll('.tn').forEach(b=>b.classList.remove('on')); sBtn.classList.add('on'); swTab('tS1',sBtn); }
+    }
+  }
+}
+
+// ── Hub filter passes ────────────────────────────────────────────────
+const hubPasses = r => {
+  if (HFS.week.size > 0 && !HFS.week.has(r[C.week])) return false;
+  if (HFS.date.size > 0 && !HFS.date.has(r[C.date])) return false;
+  if (HFS.loc.size  > 0 && !HFS.loc.has(r[C.loc]))   return false;
+  if (HFS.vint.size > 0 && !HFS.vint.has(r[C.vint])) return false;
+  if (HFS.rm.size   > 0 && !HFS.rm.has(r[C.rm]))     return false;
+  return true;
+};
+
+const hubAssocs = () => D.rows.filter(r => r[C.desig] === AI && hubPasses(r));
+
+function hubReset() {
+  ['week','date','loc','vint','rm'].forEach(k => { HFS[k] = new Set(); if(msHub[k]&&msHub[k].reset) msHub[k].reset(); });
+  renderHub();
+}
+
+// ── Initialise hub filters ─────────────────────────────────────────
+function initHubFilters() {
+  const m = D.maps;
+  const mk = (wrapId, opts, key) => {
+    const wrap = document.getElementById(wrapId); if(!wrap) return null;
+    wrap.innerHTML='';
+    return makeMS(wrapId, opts, '_hf_'+key, opts.length===1?opts[0]:'select…', ()=>{HFS[key]=new Set(FS['_hf_'+key]);renderHub();});
+  };
+  msHub.week = mk('hf-week', m.weeks, 'week');
+  msHub.date = mk('hf-date', m.dates, 'date');
+  msHub.loc  = mk('hf-loc',  m.locs,  'loc');
+  msHub.vint = mk('hf-vint', m.vints, 'vint');
+  msHub.rm   = mk('hf-rm',   m.rms,   'rm');
+}
+
+// ── Vintage index helper ───────────────────────────────────────────
+const VINT_LABELS = ['0-20 D','21-60 D','61-180 D','180+ D'];
+const vintBucket = vi => { const v = D.maps.vints[vi]||''; return VINT_LABELS.indexOf(v); };
+
+// ── Main render ────────────────────────────────────────────────────
+function renderHub() {
+  const rows = hubAssocs();
+  const curDate = HFS.date.size > 0 ? [...HFS.date].sort((a,b)=>a-b).map(i=>D.maps.dates[i]).filter(Boolean) : [...D.maps.dates];
+  const latestDi = D.maps.dates.length - 1;
+  const curMonth = D.maps.dates.length ? D.maps.dates[latestDi].slice(0,7) : '';
+
+  document.getElementById('hub-filter-lbl').textContent =
+    rows.length + ' associate rows · ' + (HFS.date.size||D.maps.dates.length) + ' dates';
+
+  renderHubAdh(rows);
+  renderHubKPIs(rows, curMonth);
+  renderHubZVC(rows, curDate);
+  renderHubVintCohort(curMonth);
+  renderHubInsights(rows, curMonth);
+  renderHubVintChart(curMonth);
+  renderHubTrendChart();
+}
+
+// ── Component A: Adh-1 Bar Chart ───────────────────────────────────
+function renderHubAdh(rows) {
+  const el = document.getElementById('hub-adh-lbl');
+  const total = new Set(rows.map(r=>r[C.emp]).filter(e=>e>=0)).size;
+  if (el) el.textContent = total + ' associates';
+  if (_hubChartAdh) { _hubChartAdh.destroy(); _hubChartAdh=null; }
+  const ctx = document.getElementById('hub-c1'); if(!ctx) return;
+
+  // 10 exact dimensions (unique agent counts)
+  const empMap = {};
+  rows.forEach(r => {
+    const ei=r[C.emp]; if(ei<0)return;
+    if(!empMap[ei]) empMap[ei]={tt:0,vc:0,vc0tp:0,ppt:0,ppt0tp:0,adh1:0,zvc:0,zppt:0,lt100:0};
+    empMap[ei].tt   = Math.max(empMap[ei].tt,   r[C.tt]);
+    empMap[ei].vc   = Math.max(empMap[ei].vc,   r[C.vc]);
+    empMap[ei].vc0tp= Math.max(empMap[ei].vc0tp, r[C.vc0tp]);
+    empMap[ei].ppt  = Math.max(empMap[ei].ppt,  r[C.ppt]);
+    empMap[ei].ppt0tp=Math.max(empMap[ei].ppt0tp,r[C.ppt0tp]);
+    if(r[C.adh1]===1)   empMap[ei].adh1=1;
+    if(r[C.zero_vc]===1)empMap[ei].zvc=1;
+    if(r[C.zero_ppt]===1)empMap[ei].zppt=1;
+    if(r[C.lt100tt]===1)empMap[ei].lt100=1;
+  });
+  const emps = Object.values(empMap);
+  const n = emps.length || 1;
+  const d = [
+    emps.filter(e=>e.tt>=900).length,
+    emps.filter(e=>e.tt>=6000).length,
+    emps.filter(e=>e.vc>=1).length,
+    emps.filter(e=>e.ppt>=1).length,
+    emps.filter(e=>e.vc0tp>=1).length,
+    emps.filter(e=>e.ppt0tp>=1).length,
+    emps.filter(e=>e.adh1===1).length,
+    emps.filter(e=>e.zvc===1).length,
+    emps.filter(e=>e.zppt===1).length,
+    emps.filter(e=>e.lt100===1).length,
+  ];
+  const labels=[
+    'Present Agents (TT≥900s)',
+    '≥100 Mins Talktime (TT≥6000s)',
+    '≥1 VC (Total)',
+    '≥1 Online PPT (Total)',
+    '≥1 VC (>0TP)',
+    '≥1 Online PPT (>0TP)',
+    'TT+VC+PPT Adherence (Adh-1)',
+    'Zero VC Agents',
+    'Zero Online PPT',
+    '<100 Mins TT',
+  ];
+  const PASTELS=[
+    'rgba(179,157,219,.8)',  // lavender
+    'rgba(128,222,234,.8)',  // mint
+    'rgba(144,202,249,.8)',  // powder blue
+    'rgba(248,187,208,.8)',  // soft rose
+    'rgba(255,204,128,.8)',  // peach
+    'rgba(165,214,167,.8)',  // sage
+    'rgba(128,203,196,.8)',  // teal
+    'rgba(255,171,145,.8)',  // coral
+    'rgba(240,204,149,.8)',  // sand
+    'rgba(200,182,255,.8)',  // lilac
+  ];
+  const BORDERS=['#7c4dff','#00bcd4','#1976d2','#e91e63','#ff9800','#388e3c','#009688','#f4511e','#ffa000','#8e24aa'];
+
+  _hubChartAdh = new Chart(ctx, {
+    type:'bar',
+    data:{ labels, datasets:[{
+      label:'Agents', data:d,
+      backgroundColor:PASTELS, borderColor:BORDERS,
+      borderWidth:2, borderRadius:5,
+    }]},
+    options:{
+      responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:c=>`${c.parsed.x} agents (${n?+(c.parsed.x/n*100).toFixed(1):0}%)`}},
+        datalabels:{display:false},
+      },
+      scales:{
+        x:{beginAtZero:true,max:n,ticks:{stepSize:Math.ceil(n/5),font:{size:10,weight:'bold'}}},
+        y:{ticks:{font:{size:10,weight:'600'}}},
+      },
+      onClick:(evt,els)=>{ if(els.length) openHubAdhDrill(els[0].index,labels,d,emps,rows); },
+      animation:{onComplete:function(){
+        const chart=this, cx=chart.ctx;
+        cx.save();
+        const meta=chart.getDatasetMeta(0);
+        chart.data.datasets[0].data.forEach((val,i)=>{
+          if(!meta.data[i])return;
+          const bar=meta.data[i];
+          const barW = bar.x - (bar.base||chart.chartArea.left);
+          const pct  = n ? +(val/n*100).toFixed(1) : 0;
+          const lbl  = val + ' (' + pct + '%)';
+          cx.font='bold 10px IBM Plex Mono,monospace';
+          cx.textBaseline='middle';
+          if(barW > 90){
+            cx.fillStyle='#1e2340'; cx.textAlign='left';
+            cx.fillText(lbl, bar.base+6, bar.y);
+          } else {
+            cx.fillStyle='#1e2340'; cx.textAlign='left';
+            cx.fillText(lbl, bar.x+4, bar.y);
+          }
+        });
+        cx.restore();
+      }},
+    }
+  });
+  // store for drill-down
+  window._hubAdhRows = rows;
+  window._hubEmpMap  = empMap;
+}
+
+// ── Adh bar drill-down modal ─────────────────────────────────────
+function openHubAdhDrill(barIdx, labels, counts, emps, rows) {
+  const filterFns = [
+    e=>e.tt>=900, e=>e.tt>=6000, e=>e.vc>=1, e=>e.ppt>=1,
+    e=>e.vc0tp>=1, e=>e.ppt0tp>=1, e=>e.adh1===1,
+    e=>e.zvc===1, e=>e.zppt===1, e=>e.lt100===1,
+  ];
+  const empMap = window._hubEmpMap || {};
+  const matchedEmpIdxs = Object.entries(empMap).filter(([ei,e])=>filterFns[barIdx](e)).map(([ei])=>+ei);
+  const matchedSet = new Set(matchedEmpIdxs);
+  const fmtSec3 = s=>{const ss=Math.round(s||0),mm=Math.floor(ss/60),hh=Math.floor(mm/60);return hh+'h '+(mm%60)+'m '+(ss%60)+'s';};
+  const agentData = {};
+  rows.forEach(r=>{
+    if(!matchedSet.has(r[C.emp]))return;
+    const ei=r[C.emp];
+    if(!agentData[ei])agentData[ei]={name:D.maps.enames[r[C.ename]]||'—',eid:D.maps.emps[ei]||'—',tenure:0,mtd:0,vc:0,tt:0};
+    if(r[C.tenure]>agentData[ei].tenure)agentData[ei].tenure=r[C.tenure];
+    if((r[C.mtd_sale]||0)>agentData[ei].mtd)agentData[ei].mtd=r[C.mtd_sale]||0;
+    agentData[ei].vc+=r[C.vc];
+    // For TT: store max (or sum if multi-date) — use max per date context
+    if(r[C.tt]>agentData[ei].tt)agentData[ei].tt=r[C.tt];
+  });
+  // Format TT for display
+  const arr = Object.values(agentData).map(a=>({...a,ttFmt:fmtSec3(a.tt)})).sort((a,b)=>a.name.localeCompare(b.name));
+  // For <100 Mins TT (barIdx 9): show actual TT column
+  const showTT = barIdx === 9 || barIdx === 0 || barIdx === 1;
+  const hdrs = showTT
+    ? ['Agent Name','Emp ID','Talktime','Tenure (Days)','MTD Sale','Total VC']
+    : ['Agent Name','Emp ID','Tenure (Days)','MTD Sale','Total VC'];
+  const cols = showTT
+    ? ['name','eid','ttFmt','tenure','mtd','vc']
+    : ['name','eid','tenure','mtd','vc'];
+  openHubModal(labels[barIdx]+' — Agents ('+arr.length+')', arr, hdrs, cols);
+}
+
+
+// ── Component B: 5 KPI Cards with 3-day history + Best Ever ────────
+function renderHubKPIs(rows, curMonth) {
+  const av = a => a.length ? a.reduce((s,v)=>s+v,0)/a.length : 0;
+  // Current metrics
+  const empSet = new Set(rows.map(r=>r[C.emp]).filter(e=>e>=0));
+  const n = empSet.size || 1;
+  const ttAvg = av(rows.map(r=>r[C.tt]));
+  const vcAvg = av(rows.map(r=>r[C.vc]));
+  const pptAvg= av(rows.map(r=>r[C.ppt]));
+  const vcTot = rows.reduce((s,r)=>s+r[C.vc],0);
+  const pptTot= rows.reduce((s,r)=>s+r[C.ppt],0);
+
+  // 3-day trailing history (last 3 unique dates in filtered rows)
+  const allDates = [...new Set(rows.map(r=>r[C.date]).filter(d=>d>=0))].sort((a,b)=>a-b);
+  const last3 = allDates.slice(-3);
+  const histStr = k => last3.map(di => {
+    const dr = D.rows.filter(r=>r[C.desig]===AI&&r[C.date]===di&&(HFS.loc.size===0||HFS.loc.has(r[C.loc])));
+    const vals = dr.map(r=>r[k]);
+    return vals.length ? av(vals).toFixed(k===C.tt?0:1) : '—';
+  }).join(' → ');
+  const histDates = last3.map(di=>D.maps.dates[di]||'').join(' → ');
+
+  // Best ever — BRANCH-SCOPED (only rows matching selected locations)
+  const branchRows = D.rows.filter(r=>r[C.desig]===AI&&(HFS.loc.size===0||HFS.loc.has(r[C.loc])));
+  const bestByDate = {};
+  branchRows.forEach(r=>{const di=r[C.date];if(!bestByDate[di])bestByDate[di]={tt:[],vc:[],ppt:[]};bestByDate[di].tt.push(r[C.tt]);bestByDate[di].vc.push(r[C.vc]);bestByDate[di].ppt.push(r[C.ppt]);});
+  let bestTT=0,bestVC=0,bestPPT=0,bestVCTot=0,bestPPTTot=0;
+  Object.values(bestByDate).forEach(v=>{
+    const d_tt=av(v.tt),d_vc=av(v.vc),d_ppt=av(v.ppt);
+    if(d_tt>bestTT)bestTT=d_tt;
+    if(d_vc>bestVC)bestVC=d_vc;
+    if(d_ppt>bestPPT)bestPPT=d_ppt;
+    if(v.vc.reduce((s,x)=>s+x,0)>bestVCTot)bestVCTot=v.vc.reduce((s,x)=>s+x,0);
+    if(v.ppt.reduce((s,x)=>s+x,0)>bestPPTTot)bestPPTTot=v.ppt.reduce((s,x)=>s+x,0);
+  });
+
+  const fmtSec2 = s => { const ss=Math.round(s||0),mm=Math.floor(ss/60),hh=Math.floor(mm/60); return hh+'h '+(mm%60)+'m'; };
+  const cards = [
+    { lbl:'Avg TT / L1', val:fmtSec2(ttAvg), hist:'3-day: '+histStr(C.tt), best:'Best: '+fmtSec2(bestTT) },
+    { lbl:'Avg VC / Agent', val:vcAvg.toFixed(2), hist:'3-day: '+histStr(C.vc), best:'Best: '+bestVC.toFixed(2) },
+    { lbl:'Avg PPT / L1', val:pptAvg.toFixed(2), hist:'3-day: '+histStr(C.ppt), best:'Best: '+bestPPT.toFixed(2) },
+    { lbl:'Total VC Count', val:vcTot.toFixed(0), hist:'Agents: '+n, best:'Best Day: '+bestVCTot.toFixed(0) },
+    { lbl:'Total PPT Count', val:pptTot.toFixed(0), hist:'Agents: '+n, best:'Best Day: '+bestPPTTot.toFixed(0) },
+  ];
+  document.getElementById('hub-kpis').innerHTML = cards.map(c=>`
+    <div class="hkc">
+      <div class="hkc-lbl">${c.lbl}</div>
+      <div class="hkc-val" style="font-size:22px;font-weight:800">${c.val}</div>
+      <div class="hkc-hist" style="font-weight:700;color:#1e2340;font-size:13px;margin-bottom:4px">${c.hist}</div>
+      <div class="hkc-best" style="font-weight:700;font-size:13px">${c.best}</div>
+    </div>`).join('');
+}
+
+// ── Component C: Zero VC Alarm ─────────────────────────────────────
+function renderHubZVC(rows, curDateStrs) {
+  // 5-day trend: INDEPENDENT of Date/Week filters — only Location filter applies
+  const locRows = D.rows.filter(r => r[C.desig]===AI && (HFS.loc.size===0||HFS.loc.has(r[C.loc])));
+  const allDi = [...new Set(locRows.map(r=>r[C.date]).filter(d=>d>=0))].sort((a,b)=>a-b);
+  const last5di = allDi.slice(-5);
+
+  // Count by date (location-only filtered)
+  const byDate = {};
+  last5di.forEach(di => {
+    const dr = locRows.filter(r=>r[C.date]===di);
+    const zero = new Set(dr.filter(r=>r[C.zero_vc]===1).map(r=>r[C.emp]));
+    byDate[di] = zero.size;
+  });
+
+  // Latest date zero count uses full hub filter for the primary number
+  const hubDi = [...new Set(rows.map(r=>r[C.date]).filter(d=>d>=0))].sort((a,b)=>a-b);
+  const latestHubDi = hubDi[hubDi.length-1];
+  const latestRows = rows.filter(r=>r[C.date]===latestHubDi);
+  const curCount = new Set(latestRows.filter(r=>r[C.zero_vc]===1).map(r=>r[C.emp])).size;
+  document.getElementById('hub-zvc-count').textContent = curCount;
+
+  // Lowest Ever — BRANCH-SCOPED only
+  const minEver = last5di.length ? Math.min(...last5di.map(di=>byDate[di]||0)) : 0;
+  // Check all branch dates for true historical min
+  const allBranchByDate = {};
+  locRows.forEach(r=>{
+    const di=r[C.date]; if(di<0)return;
+    if(!allBranchByDate[di])allBranchByDate[di]=new Set();
+    if(r[C.zero_vc]===1) allBranchByDate[di].add(r[C.emp]);
+  });
+  const trueMin = Math.min(...Object.values(allBranchByDate).map(s=>s.size));
+  document.getElementById('hub-zvc-best').textContent = isFinite(trueMin)?trueMin:'—';
+
+  const trendCounts = last5di.map(di=>byDate[di]||0);
+  const maxT = Math.max(...trendCounts,1);
+  const trendEl = document.getElementById('hub-zvc-trend');
+  trendEl.innerHTML = last5di.map((di,i)=>{
+    const cnt=trendCounts[i];
+    const dateStr=D.maps.dates[di]||'';
+    const col = cnt>curCount?'#ef4444':cnt<curCount?'#2e7d32':'#f59e0b';
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+      <div class="zvc-dot" style="background:${col};width:${20+Math.round(cnt/maxT*14)}px;height:${20+Math.round(cnt/maxT*14)}px;font-weight:800">${cnt}</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:#4b5680;font-weight:700">${dateStr.slice(5)}</div>
+    </div>`;
+  }).join('');
+}
+
+
+// ── Component D: Vintage Cohort Zero Sale ─────────────────────────
+function renderHubVintCohort(curMonth) {
+  const byVint = {0:[], 1:[], 2:[], 3:[]};
+  // Aggregate unique agents per vintage with max MTD sale
+  const empData = {};
+  D.rows.forEach(r => {
+    if (r[C.desig] !== AI) return;
+    if (!hubPasses(r)) return;
+    const ds = D.maps.dates[r[C.date]]||'';
+    if (!ds.startsWith(curMonth)) return;
+    const ei=r[C.emp]; if(ei<0)return;
+    if(!empData[ei]) empData[ei]={vint:r[C.vint],mtd:0,last:'',tenure:r[C.tenure]||0,vc:0,pptSum:0,days:0,name:D.maps.enames[r[C.ename]]||'—',eid:D.maps.emps[ei]||'—'};
+    const sale=r[C.mtd_sale]||0; if(sale>empData[ei].mtd) empData[ei].mtd=sale;
+    const ls=r[C.last_sale_date]||''; if(ls&&ls>empData[ei].last) empData[ei].last=ls;
+    if(r[C.tenure]>empData[ei].tenure) empData[ei].tenure=r[C.tenure];
+    empData[ei].vc+=r[C.vc]; empData[ei].pptSum+=r[C.ppt0tp]; empData[ei].days++;
+  });
+  Object.values(empData).forEach(a=>{
+    const b=vintBucket(a.vint); if(b>=0) byVint[b].push(a);
+  });
+  const zeroByVint = {0:[],1:[],2:[],3:[]};
+  Object.entries(byVint).forEach(([k,arr])=>{ zeroByVint[k]=arr.filter(a=>a.mtd===0); });
+
+  const colors=['#c2185b','#e65100','#1565c0','#2e7d32'];
+  document.getElementById('hub-vint-grid').innerHTML = VINT_LABELS.map((lbl,i)=>`
+    <div class="vc-card" onclick="openHubVintDrill(${i})">
+      <div class="vc-lbl" style="color:${colors[i]}">${lbl}</div>
+      <div class="vc-count">${zeroByVint[i].length}</div>
+      <div class="vc-sub">of ${byVint[i].length} agents</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;margin-top:4px;color:${colors[i]}">Click to drill down</div>
+    </div>`).join('');
+  window._hubVintData = byVint;
+  window._hubZeroVintData = zeroByVint;
+}
+
+// ── Insights Radar Panel ───────────────────────────────────────────
+function renderHubInsights(rows, curMonth) {
+  const av = a => a.length?a.reduce((s,v)=>s+v,0)/a.length:0;
+
+  // 5-day baseline (filtered rows)
+  const allDi = [...new Set(rows.map(r=>r[C.date]).filter(d=>d>=0))].sort((a,b)=>a-b);
+  const last5di = allDi.slice(-5);
+  const cur5Rows  = rows.filter(r=>last5di.includes(r[C.date]));
+  const prev5Rows = rows.filter(r=>!last5di.includes(r[C.date]));
+  const curVC   = av(cur5Rows.map(r=>r[C.vc]));
+  const prevVC  = av(prev5Rows.map(r=>r[C.vc]));
+  const curPPT  = av(cur5Rows.map(r=>r[C.ppt]));
+  const prevPPT = av(prev5Rows.map(r=>r[C.ppt]));
+
+  // Best ever for this LOCATION (branch-scoped)
+  const branchRows = D.rows.filter(r=>r[C.desig]===AI&&(HFS.loc.size===0||HFS.loc.has(r[C.loc])));
+  const bestByDateBr = {};
+  branchRows.forEach(r=>{
+    const di=r[C.date];
+    if(!bestByDateBr[di]) bestByDateBr[di]={vc:[],ppt:[]};
+    bestByDateBr[di].vc.push(r[C.vc]);
+    bestByDateBr[di].ppt.push(r[C.ppt]);
+  });
+  let bestLocVC=0, bestLocPPT=0;
+  Object.values(bestByDateBr).forEach(v=>{
+    const dvc=av(v.vc), dppt=av(v.ppt);
+    if(dvc>bestLocVC)   bestLocVC=dvc;
+    if(dppt>bestLocPPT) bestLocPPT=dppt;
+  });
+  const vcDir   = curVC>prevVC*1.02?'↑ Up':'↓ Down';
+  const pptDir  = curPPT>prevPPT*1.02?'↑ Up':'↓ Down';
+  const vcCol   = curVC>prevVC*1.02?'#2e7d32':'#c2185b';
+  const pptCol  = curPPT>prevPPT*1.02?'#2e7d32':'#c2185b';
+  const vcVsBest  = bestLocVC  ? (curVC/bestLocVC*100).toFixed(1)  : '—';
+  const pptVsBest = bestLocPPT ? (curPPT/bestLocPPT*100).toFixed(1): '—';
+
+  // B: Process check
+  const combinedAvg = av(rows.map(r=>r[C.vc]+r[C.ppt]));
+  const processGood = combinedAvg >= 2;
+
+  // C: Zero VC
+  const zvcCount = new Set(rows.filter(r=>r[C.zero_vc]===1).map(r=>r[C.emp])).size;
+  const totalA   = new Set(rows.map(r=>r[C.emp])).size;
+  const zvcPct   = totalA ? (zvcCount/totalA*100).toFixed(1) : 0;
+
+  // D: <100 Mins TT count
+  const lt100Count = new Set(rows.filter(r=>r[C.lt100tt]===1).map(r=>r[C.emp])).size;
+  const lt100Pct   = totalA ? (lt100Count/totalA*100).toFixed(1) : 0;
+
+  // E & F: Alpha/Omega TL
+  const mgrMap = {};
+  rows.forEach(r=>{
+    const mi=r[C.mgr]; if(mi<0)return;
+    if(!mgrMap[mi]){mgrMap[mi]={vc:[],ppt:[]};}
+    mgrMap[mi].vc.push(r[C.vc]); mgrMap[mi].ppt.push(r[C.ppt]);
+  });
+  const mgrArr = Object.entries(mgrMap).map(([mi,v])=>({
+    name:D.maps.mgrs[mi]||'—', avg: av(v.vc)+av(v.ppt)
+  })).filter(m=>m.name!=='—');
+  mgrArr.sort((a,b)=>b.avg-a.avg);
+  const alpha = mgrArr[0]||{name:'—',avg:0};
+  const omega = mgrArr[mgrArr.length-1]||{name:'—',avg:0};
+
+  // G: Vintage risk
+  const zeroByVint = window._hubZeroVintData || {0:[],1:[],2:[],3:[]};
+  const vintCounts = VINT_LABELS.map((l,i)=>({lbl:l,n:zeroByVint[i].length}));
+  vintCounts.sort((a,b)=>b.n-a.n);
+  const riskVint = vintCounts[0];
+
+  // H: TL talktime
+  const tlTT = {};
+  D.rows.filter(r=>(r[C.desig]===MI||r[C.desig]===CMI)&&hubPasses(r)).forEach(r=>{
+    const mi=r[C.mgr]; if(mi<0)return;
+    if(!tlTT[mi])tlTT[mi]=[];
+    tlTT[mi].push(r[C.tt]);
+  });
+  const tlArr = Object.entries(tlTT).map(([mi,tt])=>({name:D.maps.mgrs[mi]||'—',avg:av(tt)})).filter(m=>m.name!=='—');
+  tlArr.sort((a,b)=>b.avg-a.avg);
+  const tlTop = tlArr[0]||{name:'—',avg:0};
+  const tlBot = tlArr[tlArr.length-1]||{name:'—',avg:0};
+  const fmtS2 = s=>{const ss=Math.round(s||0);return Math.floor(ss/3600)+'h '+Math.floor((ss%3600)/60)+'m';};
+
+  const insights = [
+    { key:'A', text:`<strong>VC Trend:</strong> Avg VC — Current: <strong>${curVC.toFixed(2)}</strong>. Branch Best Ever: <strong>${bestLocVC.toFixed(2)}</strong> — currently at <span style="color:${+vcVsBest>=80?'#2e7d32':'#c2185b'};font-weight:700">${vcVsBest}%</span> of best.` },
+    { key:'B', text:`<strong>PPT Trend:</strong> Avg PPT <span style="color:${pptCol};font-weight:700">${pptDir}</span> — Current: <strong>${curPPT.toFixed(2)}</strong> vs 5-day prior: <strong>${prevPPT.toFixed(2)}</strong>. Branch Best Ever: <strong>${bestLocPPT.toFixed(2)}</strong> — currently at <span style="color:${pptVsBest>=80?'#2e7d32':'#c2185b'};font-weight:700">${pptVsBest}%</span> of best.` },
+    { key:'C', text:`<strong>Leakage Alert:</strong> <span style="color:#c2185b;font-weight:700">${zvcCount} agents (${zvcPct}%)</span> on ZERO VC. ${+zvcPct>30?'🔴 Critical — ZERO VC agents % is really high at <strong>'+zvcPct+'%</strong>. Immediate intervention needed.':+zvcPct>15?'⚠️ Warning — ZERO VC agents % elevated at <strong>'+zvcPct+'%</strong>.':'✅ Within acceptable range.'}` },
+    { key:'D', text:`<strong>Agents on &lt;100 Mins TT:</strong> <span style="color:${lt100Pct>20?'#c2185b':'#e65100'};font-weight:700">${lt100Count} agents (${lt100Pct}%)</span> below 100-min talktime threshold. ${+lt100Pct>20?'🔴 Needs intervention — significant portion of team not meeting minimum TT standards.':'⚠️ Monitor closely.'}`},
+    { key:'E', text:`<strong>Alpha TL:</strong> <span style="color:#2e7d32;font-weight:700">${alpha.name}</span> — Highest team avg input = <strong>${alpha.avg.toFixed(2)}</strong> (VC+PPT/executive).` },
+    { key:'F', text:`<strong>Omega TL:</strong> <span style="color:#c2185b;font-weight:700">${omega.name}</span> — Lowest team avg input = <strong>${omega.avg.toFixed(2)}</strong> (VC+PPT/executive).` },
+    { key:'G', text:`<strong>Vintage Risk:</strong> <span style="color:#f57f17;font-weight:700">${riskVint.lbl}</span> — highest 0-sale concentration: <strong>${riskVint.n} agents</strong> with no MTD sales this month.` },
+    { key:'G', text:`<strong>TL Talktime:</strong> Highest: <strong>${tlTop.name}</strong> (${fmtS2(tlTop.avg)}) · Lowest: <strong>${tlBot.name}</strong> (${fmtS2(tlBot.avg)}).` },
+  ];
+
+  document.getElementById('hub-insights-body').innerHTML = insights.map((ins,i)=>`
+    <div class="ins-row">
+      <span class="ins-badge ${ins.key}" style="${ins.key==='G'&&i===7?'background:#00695c;color:#fff':''}">${ins.key==='G'&&i===7?'H':ins.key}</span>
+      <div class="ins-text">${ins.text}</div>
+    </div>`).join('');
+}
+
+
+// ── Graph A: Vintage Avg MTD Sales bar chart ─────────────────────
+function renderHubVintChart(curMonth) {
+  const byVint = {0:{sum:0,n:0},1:{sum:0,n:0},2:{sum:0,n:0},3:{sum:0,n:0}};
+  const empMTD = {};
+  D.rows.forEach(r=>{
+    if(r[C.desig]!==AI||!hubPasses(r))return;
+    const ds=D.maps.dates[r[C.date]]||''; if(!ds.startsWith(curMonth))return;
+    const ei=r[C.emp]; if(ei<0)return;
+    if(!empMTD[ei]){empMTD[ei]={vint:r[C.vint],mtd:0};}
+    const sale=r[C.mtd_sale]||0; if(sale>empMTD[ei].mtd)empMTD[ei].mtd=sale;
+  });
+  Object.values(empMTD).forEach(a=>{
+    const b=vintBucket(a.vint); if(b>=0){byVint[b].sum+=a.mtd;byVint[b].n++;}
+  });
+  const avgs = VINT_LABELS.map((_,i)=>byVint[i].n?+(byVint[i].sum/byVint[i].n).toFixed(2):0);
+  const totN  = Object.values(byVint).reduce((s,v)=>s+v.n,0)||1;
+  const totSum= Object.values(byVint).reduce((s,v)=>s+v.sum,0);
+  const overallAvg = +(totSum/totN).toFixed(2);
+  const overallTot = totSum;
+
+  if(_hubChartVint){_hubChartVint.destroy();_hubChartVint=null;}
+  const ctx=document.getElementById('hub-c-vint'); if(!ctx)return;
+  _hubChartVint = new Chart(ctx,{
+    type:'bar',
+    data:{labels:VINT_LABELS,datasets:[{
+      label:'Avg MTD Sales',
+      data:avgs,
+      backgroundColor:['rgba(194,24,91,.75)','rgba(230,81,0,.75)','rgba(21,101,192,.75)','rgba(46,125,50,.75)'],
+      borderColor:['#c2185b','#e65100','#1565c0','#2e7d32'],
+      borderWidth:2,borderRadius:6,
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:c=>`Avg: ${c.parsed.y} | Total agents: ${byVint[c.dataIndex].n}`}},
+      },
+      scales:{y:{beginAtZero:true,ticks:{font:{size:10,weight:'bold'}}}},
+      animation:{onComplete: function() {
+        const chart=this; const cx2=chart.ctx;
+        cx2.save();
+        cx2.font='bold 11px IBM Plex Mono,monospace';
+        cx2.textAlign='center'; cx2.textBaseline='bottom';
+        chart.data.datasets[0].data.forEach((val,i)=>{
+          const meta=chart.getDatasetMeta(0);
+          if(!meta.data[i]) return;
+          const bar=meta.data[i];
+          // Paint inside the bar near the top (10px from top of bar)
+          const barTop = bar.y;
+          const barBot = bar.base || chart.chartArea.bottom;
+          const barH   = barBot - barTop;
+          if(barH > 20) {
+            cx2.fillStyle='#fff';
+            cx2.fillText(val, bar.x, barTop + Math.min(22, barH*0.4));
+          } else {
+            // bar too small — paint above
+            cx2.fillStyle='#1e2340';
+            cx2.fillText(val, bar.x, barTop - 3);
+          }
+        });
+        cx2.restore();
+      }},
+      onClick:(e,els)=>{if(els.length){openHubVintDrillAll(els[0].index);}},
+    }
+  });
+  // Update overall labels
+  const totEl=document.getElementById('hub-vint-overall');
+  if(totEl) totEl.innerHTML=`<span style="font-weight:800;font-size:13px;color:#1e2340">Overall MTD Sales: ${overallTot}</span> &nbsp;|&nbsp; <span style="font-weight:800;font-size:13px;color:#3b82f6">Overall Avg Sale/L1: ${overallAvg}</span>`;
+  window._hubVintAvgs=avgs;
+}
+
+
+// ── Graph B: 7-Day VC/PPT/0-VC — LOCATION FILTER ONLY ────────────
+function renderHubTrendChart() {
+  // ONLY apply location filter — bypass Week, Date, Vintage, RM
+  const locOnlyRows = D.rows.filter(r =>
+    r[C.desig]===AI && (HFS.loc.size===0||HFS.loc.has(r[C.loc]))
+  );
+  const allDi=[...new Set(locOnlyRows.map(r=>r[C.date]).filter(d=>d>=0))].sort((a,b)=>a-b);
+  const last7=allDi.slice(-7);
+  const labels=last7.map(di=>D.maps.dates[di]||'').map(d=>d.slice(5));
+  const vcData=[],pptData=[],zvcData=[];
+  last7.forEach(di=>{
+    const dr=locOnlyRows.filter(r=>r[C.date]===di);
+    vcData.push(dr.reduce((s,r)=>s+r[C.vc],0));
+    pptData.push(dr.reduce((s,r)=>s+r[C.ppt],0));
+    const zvcSet=new Set(dr.filter(r=>r[C.zero_vc]===1).map(r=>r[C.emp]));
+    zvcData.push(zvcSet.size);
+  });
+  if(_hubChartTrend){_hubChartTrend.destroy();_hubChartTrend=null;}
+  const ctx=document.getElementById('hub-c-trend'); if(!ctx)return;
+  _hubChartTrend=new Chart(ctx,{
+    data:{labels,datasets:[
+      {type:'bar',label:'VC Count',data:vcData,
+       backgroundColor:'rgba(59,130,246,.65)',borderColor:'#3b82f6',
+       borderWidth:2,borderRadius:4,yAxisID:'y'},
+      {type:'bar',label:'PPT Count',data:pptData,
+       backgroundColor:'rgba(16,185,129,.65)',borderColor:'#10b981',
+       borderWidth:2,borderRadius:4,yAxisID:'y'},
+      {type:'line',label:'0-VC Agents',data:zvcData,
+       borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.12)',
+       borderWidth:3,pointRadius:5,pointBackgroundColor:'#ef4444',
+       pointBorderColor:'#fff',pointBorderWidth:2,
+       yAxisID:'y2',tension:.35},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:'top',
+        labels:{font:{size:11,weight:'bold'},boxWidth:14}}},
+      scales:{
+        y:{type:'linear',position:'left',beginAtZero:true,
+          title:{display:true,text:'VC / PPT',font:{size:10,weight:'bold'}},
+          ticks:{font:{size:10,weight:'bold'}}},
+        y2:{type:'linear',position:'right',beginAtZero:true,grid:{drawOnChartArea:false},
+          title:{display:true,text:'0-VC Agents',font:{size:10,weight:'bold'}},
+          ticks:{font:{size:10,weight:'bold'}}},
+      },
+      animation:{onComplete:function(){
+        const chart=this; const cx=chart.ctx;
+        cx.save(); cx.font='bold 10px IBM Plex Mono,monospace'; cx.textAlign='center'; cx.textBaseline='bottom';
+        // Bar datasets (0=VC, 1=PPT)
+        [0,1].forEach(dsIdx=>{
+          const meta=chart.getDatasetMeta(dsIdx);
+          chart.data.datasets[dsIdx].data.forEach((val,i)=>{
+            if(!meta.data[i])return;
+            const bar=meta.data[i];
+            cx.fillStyle=dsIdx===0?'#1565c0':'#2e7d32';
+            cx.fillText(val, bar.x, bar.y-3);
+          });
+        });
+        // Line dataset (2=0-VC)
+        const meta2=chart.getDatasetMeta(2);
+        chart.data.datasets[2].data.forEach((val,i)=>{
+          if(!meta2.data[i])return;
+          const pt=meta2.data[i];
+          cx.fillStyle='#c2185b';
+          cx.fillText(val, pt.x, pt.y-8);
+        });
+        cx.restore();
+      }}
+    }
+  });
+}
+
+
+// ── Drill-downs ────────────────────────────────────────────────────
+function openHubZVCDrill() {
+  // Latest date zero-VC agents
+  const allDi=[...new Set(D.rows.filter(r=>r[C.desig]===AI&&hubPasses(r)).map(r=>r[C.date]).filter(d=>d>=0))].sort((a,b)=>a-b);
+  const latestDi=allDi[allDi.length-1];
+  if(latestDi===undefined)return;
+  const curMonth=D.maps.dates[latestDi].slice(0,7);
+  const empData={};
+  D.rows.forEach(r=>{
+    if(r[C.desig]!==AI||!hubPasses(r)||r[C.date]!==latestDi)return;
+    if(r[C.zero_vc]!==1)return;
+    const ei=r[C.emp]; if(ei<0)return;
+    if(!empData[ei])empData[ei]={name:D.maps.enames[r[C.ename]]||'—',tenure:0,mtd:0};
+    if(r[C.tenure]>empData[ei].tenure)empData[ei].tenure=r[C.tenure];
+    const sale=r[C.mtd_sale]||0; if(sale>empData[ei].mtd)empData[ei].mtd=sale;
+  });
+  const arr=Object.values(empData).sort((a,b)=>a.name.localeCompare(b.name));
+  const hdrs=['Agent Name','Tenure (Days)','MTD Sale Count'];
+  const cols=['name','tenure','mtd'];
+  openHubModal('L1 on 0 VC — Latest Date ('+D.maps.dates[latestDi]+')',arr,hdrs,cols);
+}
+
+function openHubVintDrill(vintIdx) {
+  // Zero-sale agents in that vintage bracket
+  const arr=(window._hubZeroVintData||{})[vintIdx]||[];
+  const hdrs=['Agent Name','Emp ID','MTD Sale','Last Sale Date','Tenure','MTD VC Count'];
+  const cols=['name','eid','mtd','last','tenure','vc'];
+  const data=arr.map(a=>({...a,vc:+(a.vc).toFixed(1)}));
+  openHubModal('0-Sale Agents — '+VINT_LABELS[vintIdx],data,hdrs,cols);
+}
+
+function openHubVintDrillAll(vintIdx) {
+  // All agents in that vintage (for bar chart click)
+  const arr=((window._hubVintData||{})[vintIdx]||[]).sort((a,b)=>b.mtd-a.mtd);
+  const hdrs=['Agent Name','Emp ID','MTD Sale','Last Sale Date','Tenure','MTD VC Count'];
+  const cols=['name','eid','mtd','last','tenure','vc'];
+  const data=arr.map(a=>({...a,vc:+(a.vc).toFixed(1)}));
+  openHubModal('All Agents — '+VINT_LABELS[vintIdx],data,hdrs,cols);
+}
+
+function openHubModal(title,data,hdrs,cols) {
+  _hubModalData=data; _hubModalCols=cols; _hubModalHdrs=hdrs;
+  document.getElementById('hub-modal-title').textContent=title;
+  document.getElementById('hub-modal-badge').textContent=data.length+' agents';
+  document.getElementById('hub-modal-thead').innerHTML=
+    '<tr>'+['#',...hdrs].map(h=>`<th style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;color:#fff;background:#1e2340;padding:7px 10px;text-align:${h==='#'||h==='Agent Name'?'left':'center'};position:sticky;top:0">${h}</th>`).join('')+'</tr>';
+  const ROW_BG=['#fff','#f8fafd'];
+  document.getElementById('hub-modal-body-rows').innerHTML=data.map((a,i)=>
+    '<tr style="background:'+ROW_BG[i%2]+'"><td style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;color:#8b93b8;padding:7px 10px;text-align:left">'+(i+1)+'</td>'+
+    cols.map((c,ci)=>`<td style="padding:7px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace;text-align:${ci===0?'left':'center'};${ci===0?'font-weight:700':'font-weight:600;color:#1e2340'}">${a[c]??'—'}</td>`).join('')+
+    '</tr>').join('');
+  const bg=document.getElementById('hub-modal-bg');
+  bg.style.display='flex';
+}
+
+function closeHubModal(){
+  document.getElementById('hub-modal-bg').style.display='none';
+}
+
+function exportHubModalCSV(){
+  const hdr=['#',..._hubModalHdrs];
+  const rows=_hubModalData.map((a,i)=>[i+1,..._hubModalCols.map(c=>a[c]??'')]);
+  const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+  const csv=[hdr,...rows].map(r=>r.map(q).join(',')).join('\n');
+  const el=document.createElement('a');
+  el.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  el.download='Hub_Export.csv'; el.click();
+}
+
+// Close hub modal on bg click
+document.addEventListener('DOMContentLoaded', function() {
+  const bg=document.getElementById('hub-modal-bg');
+  if(bg) bg.addEventListener('click',function(e){if(e.target===this)closeHubModal();});
+});
+
+// Init hub filters when DOMContentLoaded already fires — call from existing DOM event
+// Hook into existing DOMContentLoaded
+const _origHubInit = (typeof window !== 'undefined') ? null : null;
+// We patch the DOMContentLoaded by appending to existing
+document.addEventListener('DOMContentLoaded', function() {
+  initHubFilters();
+});
+
+ener('DOMContentLoaded', function() {
+  initHubFilters();
+});
 
 </script>
